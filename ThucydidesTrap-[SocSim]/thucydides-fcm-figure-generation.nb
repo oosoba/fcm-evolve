@@ -1,0 +1,4456 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    173351,       4448]
+NotebookOptionsPosition[    170846,       4359]
+NotebookOutlinePosition[    171257,       4377]
+CellTagsIndexPosition[    171214,       4374]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["FCM Lib Import", "Subsection",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.6713152832418957`*^9, 3.67131529576199*^9}, {
+  3.671807773496496*^9, 3.671807773809585*^9}, {3.671816151499956*^9, 
+  3.671816154804381*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"SetDirectory", "@", 
+  RowBox[{"NotebookDirectory", "[", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Needs", "[", 
+  RowBox[{"\"\<FCMLib`\>\"", ",", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<../lib/\>\"", ",", 
+      "\"\<FCMLib-cur.wl\>\""}], "}"}], "]"}]}], 
+  "]"}], "\[IndentingNewLine]", "$FCMLibVersion", "\[IndentingNewLine]", \
+"$activationThreshold"}], "Input",
+ CellChangeTimes->{{3.6718159084316998`*^9, 3.671815961270492*^9}, 
+   3.671816005170795*^9, {3.6718162194935303`*^9, 3.671816220225827*^9}, {
+   3.6718986809439907`*^9, 3.671898684038557*^9}, {3.6826896391575537`*^9, 
+   3.682689643452056*^9}, {3.7220529949806013`*^9, 3.7220529967983522`*^9}, {
+   3.7220866691352377`*^9, 3.722086673829528*^9}, {3.72208701591835*^9, 
+   3.72208702770397*^9}, {3.722784936295886*^9, 3.72278497061983*^9}, 
+   3.722843983403199*^9}],
+
+Cell[BoxData["\<\"/Users/oosoba/Documents/RAND/Coding/fcm-fusion/socsim\"\>"],\
+ "Output",
+ CellChangeTimes->{3.738960334334062*^9}],
+
+Cell[BoxData["\<\"Fuzzy Cognitive Map Library ver. 0.0.8\"\>"], "Output",
+ CellChangeTimes->{3.7389603343721046`*^9}],
+
+Cell[BoxData["0.5`"], "Output",
+ CellChangeTimes->{3.738960334385552*^9}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Thucydides Trap Dev", "Subsection",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.671315676317874*^9, 3.6713156892642612`*^9}, {
+  3.722086533362556*^9, 3.722086539057061*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Specification", "Subsubsection",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.6713776483505163`*^9, 3.671377653548087*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"logisticActvn", "[", "t_", "]"}], ":=", 
+   RowBox[{"Max", "[", 
+    RowBox[{"0", ",", 
+     RowBox[{"LogisticSigmoid", "[", 
+      RowBox[{
+       RowBox[{"7.5", "t"}], "-", "3.5"}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetAttributes", "[", 
+   RowBox[{"logisticActvn", ",", 
+    RowBox[{"{", 
+     RowBox[{"Listable", ",", "NumericFunction"}], "}"}]}], "]"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"linearActvn", "[", "t_", "]"}], ":=", 
+   RowBox[{"Min", "[", 
+    RowBox[{
+     RowBox[{"Max", "[", 
+      RowBox[{"0", ",", "t"}], "]"}], ",", "1"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetAttributes", "[", 
+   RowBox[{"linearActvn", ",", 
+    RowBox[{"{", 
+     RowBox[{"Listable", ",", "NumericFunction"}], "}"}]}], "]"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"LU", " ", 
+    RowBox[{"Activation", ":"}]}], " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"$activationFxn", ",", " ", "$activationBias"}], "}"}], " ", "=",
+     " ", 
+    RowBox[{"{", 
+     RowBox[{"linearActvn", ",", " ", "0"}], "}"}]}], ";"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"Logistic", " ", 
+    RowBox[{"Activation", ":"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"$activationFxn", ",", " ", "$activationBias"}], "}"}], " ", 
+     "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"logisticActvn", ",", " ", "0"}], "}"}]}], ";"}], "*)"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{
+   "$activationFxn", ",", " ", "$activationBias", ",", 
+    "$activationThreshold"}], "}"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"To", " ", 
+      RowBox[{"Reset", ":", " ", 
+       RowBox[{"{", 
+        RowBox[{"$activationFxn", ",", " ", "$activationBias"}], "}"}]}]}], 
+     "=", "oldActvnParams"}], ";"}], " ", "*)"}]}]}], "Input",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.680286940953034*^9, 3.680286945176279*^9}, {
+  3.680348853626753*^9, 3.6803489902941303`*^9}, {3.680362009182208*^9, 
+  3.680362035805212*^9}, {3.680362662035508*^9, 3.680362691558073*^9}, {
+  3.680379242072803*^9, 3.680379243615279*^9}, {3.727697385224904*^9, 
+  3.727697385498007*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"linearActvn", ",", "0", ",", "0.5`"}], "}"}]], "Output",
+ CellChangeTimes->{3.7389603345178547`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"trapvs", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<./trap-verts.csv\>\"", ",", " ", "\"\<CSV\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+     RowBox[{";;", ",", 
+      RowBox[{"2", ";;"}]}], "\[RightDoubleBracket]"}], "=", 
+    RowBox[{"StringTrim", "/@", 
+     RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+      RowBox[{";;", ",", 
+       RowBox[{"2", ";;"}]}], "\[RightDoubleBracket]"}]}]}], ";"}], 
+  " "}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"n", " ", "=", 
+   RowBox[{"Length", "@", "trapvs"}]}], "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"addjitter", "=", "0.075"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"strongOrLink", "=", 
+   RowBox[{"$activationThreshold", "/", "2"}]}], " ", ";"}], "\n", 
+ RowBox[{
+  RowBox[{"orLink", "=", "strongOrLink"}], 
+  RowBox[{"(*", 
+   RowBox[{"-", "0.05"}], "*)"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"weakOrLink", "=", 
+   RowBox[{"$activationThreshold", "/", "4"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"unsure", "=", "orLink"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"andLink", "=", 
+   RowBox[{"$activationThreshold", "/", "3"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"subAndLink", "=", 
+   RowBox[{"$activationThreshold", " ", "+", " ", 
+    RowBox[{"2", "\[Times]", "addjitter"}]}]}], ";"}], "\n"}], "Input",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.722086971685746*^9, 3.7220869855501842`*^9}, {
+   3.722087047624938*^9, 3.722087053726306*^9}, {3.7220879190978394`*^9, 
+   3.722087923679044*^9}, 3.726890316418857*^9, {3.726890352261126*^9, 
+   3.726890397222928*^9}, {3.727697143926985*^9, 3.727697147749015*^9}, {
+   3.727697198226375*^9, 3.7276971991565847`*^9}, {3.727697461464299*^9, 
+   3.727697461672765*^9}, {3.727697624589085*^9, 3.727697630330228*^9}, {
+   3.727698098123014*^9, 3.7276981166177797`*^9}, {3.727698169656686*^9, 
+   3.727698170800291*^9}}],
+
+Cell[BoxData["17"], "Output",
+ CellChangeTimes->{3.738960334700582*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"trapspec", "=", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"2", ",", "1", ",", "subAndLink"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "1", ",", "subAndLink"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "2", ",", "subAndLink"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "3", ",", "subAndLink"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "1", ",", 
+        RowBox[{"-", "weakOrLink"}]}], "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{"FEAR", " ", "edges"}], "*)"}], "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "6", ",", "subAndLink"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"6", ",", "5", ",", "subAndLink"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "7", ",", "subAndLink"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"7", ",", "5", ",", "subAndLink"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"8", ",", "5", ",", 
+        RowBox[{"-", "weakOrLink"}]}], "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{"Honor", " ", "edges"}], "*)"}], "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"14", ",", "12", ",", 
+        RowBox[{"-", "weakOrLink"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"14", ",", "13", ",", 
+        RowBox[{"-", "weakOrLink"}]}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"12", ",", "11", ",", "subAndLink"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"13", ",", "11", ",", "subAndLink"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"15", ",", "11", ",", 
+        RowBox[{"weakOrLink", "+", "addjitter"}]}], "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{"Interests", " ", "edges"}], "*)"}], "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"17", ",", "17", ",", "orLink"}], "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"WAR", " ", "self"}], "-", 
+        RowBox[{"excitations", " ", "for", " ", "temporal", " ", 
+         RowBox[{"correlation", "/", "momentum"}], " ", "of", " ", "war"}]}], 
+       "*)"}], "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "17", ",", 
+        RowBox[{"1", "/", "3"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "17", ",", 
+        RowBox[{"1", "/", "3"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"11", ",", "17", ",", 
+        RowBox[{"1", "/", "3"}]}], "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"TLD", "'"}], 
+        RowBox[{"and", "'"}], " ", "links"}], "*)"}], "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "17", ",", 
+        RowBox[{
+         RowBox[{"-", "andLink"}], "-", "addjitter"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"9", ",", "17", ",", 
+        RowBox[{
+         RowBox[{"-", "andLink"}], "-", "addjitter"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"10", ",", "17", ",", 
+        RowBox[{"-", "andLink"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"15", ",", "17", ",", "andLink"}], "}"}], ",", " ", 
+      RowBox[{"(*", 
+       RowBox[{"Aux", " ", 
+        RowBox[{"TLD", "'"}], 
+        RowBox[{"and", "'"}], " ", "links"}], "*)"}], "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"16", ",", "17", ",", "andLink"}], "}"}]}], " ", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Shi", " ", "link"}], "..."}], "?"}], "*)"}], 
+     "\[IndentingNewLine]", "}"}]}], ";"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{"trapFCM", " ", "=", 
+   RowBox[{"FCM", "[", 
+    RowBox[{"trapvs", ",", "trapspec", ",", " ", "0.37"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fcms", " ", "=", " ", 
+   RowBox[{"{", "trapFCM", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Row", "@", 
+  RowBox[{"{", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"TableForm", "[", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+       RowBox[{";;", ",", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2", ",", "3"}], "}"}]}], 
+       "\[RightDoubleBracket]"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"TableHeadings", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"None", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Style", "[", 
+            RowBox[{"#", ",", "Bold"}], "]"}], "&"}], "/@", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<\>\"", ",", " ", "\"\<Label\>\"", ",", 
+            "\"\<Full Description\>\""}], "}"}]}]}], "}"}]}]}], 
+     "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Graph", "[", 
+     RowBox[{"trapFCM", ",", "\[IndentingNewLine]", 
+      RowBox[{"GraphLayout", "\[Rule]", "\"\<RadialEmbedding\>\""}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"ImageSize", "\[Rule]", 
+       RowBox[{"72", "\[Times]", "12"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+   "\[IndentingNewLine]", "}"}]}], "\[IndentingNewLine]"}], "Input",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.671315701532504*^9, 3.6713162456621437`*^9}, {
+   3.671316342674727*^9, 3.671316343227413*^9}, {3.6713164252593393`*^9, 
+   3.6713164320588713`*^9}, {3.6713166478395243`*^9, 3.671316650335011*^9}, {
+   3.671316903068858*^9, 3.671316971461405*^9}, {3.72208665467492*^9, 
+   3.722086691321526*^9}, {3.722086733188787*^9, 3.722086867115405*^9}, {
+   3.72208721349319*^9, 3.722087213915202*^9}, {3.722087898927244*^9, 
+   3.722087903877569*^9}, {3.722087938772264*^9, 3.722087941689966*^9}, 
+   3.722976114791342*^9, {3.726890375775704*^9, 3.726890382312027*^9}, {
+   3.727117730088883*^9, 3.7271177335511627`*^9}, 3.727117768298325*^9, {
+   3.727121827593286*^9, 3.727121832713085*^9}, {3.727122034427507*^9, 
+   3.727122036659857*^9}, {3.72769721547243*^9, 3.727697232663941*^9}, 
+   3.7276975380497513`*^9, {3.727697592083621*^9, 3.727697597754098*^9}, {
+   3.727697635593039*^9, 3.727697639712286*^9}, {3.727697704536914*^9, 
+   3.72769770737702*^9}, {3.727697756089623*^9, 3.727697759263814*^9}, {
+   3.727697954473235*^9, 3.727698019771447*^9}, {3.727698052407305*^9, 
+   3.727698056246842*^9}, {3.727698318411415*^9, 3.727698325230775*^9}}],
+
+Cell[BoxData[
+ TemplateBox[{TagBox[
+    TagBox[
+     GridBox[{{
+        TagBox[
+         StyleBox["\"\"", Bold, StripOnInput -> False], HoldForm], 
+        TagBox[
+         StyleBox["\"Label\"", Bold, StripOnInput -> False], HoldForm], 
+        TagBox[
+         StyleBox["\"Full Description\"", Bold, StripOnInput -> False], 
+         HoldForm]}, {"1", "\"FEAR\"", "\"Fear\""}, {
+       "2", "\"usd\"", "\"US Military/Defense Posture\""}, {
+       "3", "\"chnd\"", "\"China Military/Defense Posture\""}, {
+       "4", "\"geod\"", "\"Geographical Distance\""}, {
+       "5", "\"ENT\"", "\"Sense of Entitlement/Honor\""}, {
+       "6", "\"uspub\"", "\"US Public Resentment\""}, {
+       "7", "\"chnpub\"", "\"Chinese Public Resentment\""}, {
+       "8", "\"dipl\"", "\"Diplomacy Channels & International Rules\""}, {
+       "9", "\"NUKE\"", "\"Nuclear Power/MAD\""}, {
+       "10", "\"ShrdCult\"", "\"Shared Culture\""}, {
+       "11", "\"INT\"", "\"National Interests Clash\""}, {
+       "12", "\"usecon\"", "\"US Economic Dominance\""}, {
+       "13", "\"chnecon\"", "\"China Economic Dominance\""}, {
+       "14", "\"econdep\"", "\"Economic Interdependence\""}, {
+       "15", "\"allyTangle\"", "\"Alliance Network Structural Friction\""}, {
+       "16", "\"shi\"", "\"Contextual/Historical Military Momentum\""}, {
+       "17", "\"WAR*\"", "\"War\""}}, RowSpacings -> 1, ColumnSpacings -> 3, 
+      RowAlignments -> Baseline, ColumnAlignments -> Left, ColumnLines -> 
+      False, RowLines -> {1, False}, ColumnAlignments -> Left], {
+     None, OutputFormsDump`HeadedColumns}], 
+    Function[BoxForm`e$, 
+     TableForm[BoxForm`e$, TableHeadings -> {None, {
+         Style["", Bold], 
+         Style["Label", Bold], 
+         Style["Full Description", Bold]}}]]],GraphicsBox[
+    NamespaceBox["NetworkGraphics", 
+     DynamicModuleBox[{Typeset`graph = HoldComplete[
+         Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 
+          17}, {{{2, 1}, {3, 1}, {1, 2}, {1, 3}, {4, 1}, {5, 6}, {6, 5}, {5, 
+           7}, {7, 5}, {8, 5}, {14, 12}, {14, 13}, {12, 11}, {13, 11}, {15, 
+           11}, {17, 17}, {1, 17}, {5, 17}, {11, 17}, {4, 17}, {9, 17}, {10, 
+           17}, {15, 17}, {16, 17}}, Null}, {
+          EdgeLabels -> {
+            DirectedEdge[11, 17] -> Rational[1, 3], 
+             DirectedEdge[4, 1] -> -0.125, DirectedEdge[16, 17] -> 
+             0.16666666666666666`, DirectedEdge[15, 11] -> 0.2, 
+             DirectedEdge[1, 3] -> 0.65, 
+             DirectedEdge[4, 17] -> -0.24166666666666664`, DirectedEdge[1, 2] -> 
+             0.65, DirectedEdge[5, 17] -> Rational[1, 3], DirectedEdge[2, 1] -> 
+             0.65, DirectedEdge[12, 11] -> 0.65, DirectedEdge[7, 5] -> 0.65, 
+             DirectedEdge[3, 1] -> 0.65, DirectedEdge[13, 11] -> 0.65, 
+             DirectedEdge[17, 17] -> 0.25, 
+             DirectedEdge[9, 17] -> -0.24166666666666664`, 
+             DirectedEdge[8, 5] -> -0.125, DirectedEdge[5, 6] -> 0.65, 
+             DirectedEdge[1, 17] -> Rational[1, 3], 
+             DirectedEdge[14, 12] -> -0.125, DirectedEdge[6, 5] -> 0.65, 
+             DirectedEdge[10, 17] -> -0.16666666666666666`, 
+             DirectedEdge[15, 17] -> 0.16666666666666666`, 
+             DirectedEdge[14, 13] -> -0.125, DirectedEdge[5, 7] -> 0.65}, 
+           EdgeShapeFunction -> {
+             GraphElementData["FilledArrow", "ArrowSize" -> 0.02]}, 
+           EdgeWeight -> {
+            0.65, 0.65, 0.65, 0.65, -0.125, 0.65, 0.65, 0.65, 
+             0.65, -0.125, -0.125, -0.125, 0.65, 0.65, 0.2, 0.25, 
+             Rational[1, 3], 
+             Rational[1, 3], 
+             Rational[
+             1, 3], -0.24166666666666664`, -0.24166666666666664`, \
+-0.16666666666666666`, 0.16666666666666666`, 0.16666666666666666`}, 
+           GraphLayout -> {
+            "Dimension" -> 2, "VertexLayout" -> "RadialEmbedding"}, ImageSize -> 
+           864, Properties -> {
+            6 -> {Tooltip -> {6, "uspub"}}, 2 -> {Tooltip -> {2, "usd"}}, 
+             1 -> {Tooltip -> {1, "FEAR"}}, 12 -> {Tooltip -> {12, "usecon"}},
+              10 -> {Tooltip -> {10, "ShrdCult"}}, 
+             5 -> {Tooltip -> {5, "ENT"}}, 14 -> {Tooltip -> {14, "econdep"}},
+              11 -> {Tooltip -> {11, "INT"}}, 8 -> {Tooltip -> {8, "dipl"}}, 
+             3 -> {Tooltip -> {3, "chnd"}}, 
+             13 -> {Tooltip -> {13, "chnecon"}}, 
+             4 -> {Tooltip -> {4, "geod"}}, 17 -> {Tooltip -> {17, "WAR*"}}, 
+             9 -> {Tooltip -> {9, "NUKE"}}, 7 -> {Tooltip -> {7, "chnpub"}}, 
+             15 -> {Tooltip -> {15, "allyTangle"}}, 
+             16 -> {Tooltip -> {16, "shi"}}}, 
+           VertexLabels -> {
+            8 -> Placed["dipl", Center], 12 -> Placed["usecon", Center], 14 -> 
+             Placed["econdep", Center], 2 -> Placed["usd", Center], 13 -> 
+             Placed["chnecon", Center], 5 -> Placed["ENT", Center], 7 -> 
+             Placed["chnpub", Center], 9 -> Placed["NUKE", Center], 17 -> 
+             Placed["WAR*", Center], 16 -> Placed["shi", Center], 11 -> 
+             Placed["INT", Center], 6 -> Placed["uspub", Center], 1 -> 
+             Placed["FEAR", Center], 15 -> Placed["allyTangle", Center], 3 -> 
+             Placed["chnd", Center], 4 -> Placed["geod", Center], 10 -> 
+             Placed["ShrdCult", Center]}, VertexSize -> {0.37}}]]}, 
+      TagBox[
+       GraphicsGroupBox[{{
+          Directive[
+           Opacity[0.7], 
+           Hue[0.6, 0.7, 0.5]], {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[
+             
+             BezierCurveBox[{{1.3414422717769559`, 2.6212146683504427`}, {
+              1.1689813367905253`, 3.1177615305875803`}, {1.3249178785188587`,
+               3.61974295996989}}]]}, 
+           InsetBox[
+            FormBox["0.65`", TraditionalForm], {1.263283094734546, 
+            3.1193221066320995`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[
+             
+             BezierCurveBox[{{1.3414422717769559`, 2.6212146683504427`}, {
+              0.8287453308383682, 2.7371603765290753`}, {0.48495360146608735`,
+               3.134789358503803}}]]}, 
+           InsetBox[
+            FormBox["0.65`", TraditionalForm], {0.8772477083107864, 
+            2.8180478065053625`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{1.3414422717769559`, 2.6212146683504427`}, {
+             1.8098714799849451`, 1.809871479984945}}]}, 
+           InsetBox[
+            FormBox[
+             FractionBox["1", "3"], TraditionalForm], {1.5756568758809504`, 
+            2.2155430741676936`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[
+             
+             BezierCurveBox[{{1.3249178785188587`, 3.61974295996989}, {
+              1.4973788135052897`, 3.1231960977381}, {1.3414422717769559`, 
+              2.6212146683504427`}}]]}, 
+           InsetBox[
+            FormBox["0.65`", TraditionalForm], {1.4030770555612688`, 
+            3.1216355216882334`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[
+             
+             BezierCurveBox[{{0.48495360146608735`, 3.134789358503803}, {
+              0.9976505424046752, 3.018843650325942}, {1.3414422717769559`, 
+              2.6212146683504427`}}]]}, 
+           InsetBox[
+            FormBox["0.65`", TraditionalForm], {0.9491481649322573, 
+            2.9379562203488843`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{0.9049357399924729, 2.052348280717989}, {
+             1.3414422717769559`, 2.6212146683504427`}}]}, 
+           InsetBox[
+            FormBox[
+             RowBox[{"-", "0.125`"}], TraditionalForm], {1.1231890058847145`, 
+            2.3367814745342157`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{0.9049357399924729, 2.052348280717989}, {
+             1.8098714799849451`, 1.809871479984945}}]}, 
+           InsetBox[
+            FormBox[
+             RowBox[{"-", "0.24166666666666664`"}], TraditionalForm], {
+            1.357403609988709, 1.931109880351467}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[
+             
+             BezierCurveBox[{{1.147412540725516, 1.147412540725516}, {
+              0.54451715998703, 1.0474838340981376`}, {0., 
+              1.324917878518859}}]]}, 
+           InsetBox[
+            FormBox["0.65`", TraditionalForm], {0.561280896717224, 
+            1.155846331771401}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[
+             
+             BezierCurveBox[{{1.147412540725516, 1.147412540725516}, {
+              0.9251183140457581, 0.707247828145729}, {0.4849536014660869, 
+              0.4849536014660871}}]]}, 
+           InsetBox[
+            FormBox["0.65`", TraditionalForm], {0.8625551968439615, 
+            0.7698109453476414}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{1.147412540725516, 1.147412540725516}, {
+             1.8098714799849451`, 1.809871479984945}}]}, 
+           InsetBox[
+            FormBox[
+             FractionBox["1", "3"], TraditionalForm], {1.4786420103552307`, 
+            1.4786420103552305`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[
+             
+             BezierCurveBox[{{0., 1.324917878518859}, {0.6028953807384877, 
+              1.4248465851461174`}, {1.147412540725516, 
+              1.147412540725516}}]]}, 
+           InsetBox[
+            FormBox["0.65`", TraditionalForm], {0.586131644008292, 
+            1.3164840874729737`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[
+             
+             BezierCurveBox[{{0.4849536014660869, 0.4849536014660871}, {
+              0.7072478281458454, 0.9251183140457334}, {1.147412540725516, 
+              1.147412540725516}}]]}, 
+           InsetBox[
+            FormBox["0.65`", TraditionalForm], {0.7698109453476414, 
+            0.8625551968439616}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{1.3249178785188587`, 0.}, {1.147412540725516, 
+             1.147412540725516}}]}, 
+           InsetBox[
+            FormBox[
+             RowBox[{"-", "0.125`"}], TraditionalForm], {1.2361652096221873`, 
+            0.573706270362758}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[{{2.0523482807179882`, 0.9049357399924723}, {
+             1.8098714799849451`, 1.809871479984945}}]}, 
+           InsetBox[
+            FormBox[
+             RowBox[{"-", "0.24166666666666664`"}], TraditionalForm], {
+            1.9311098803514666`, 1.3574036099887086`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{2.4723304192443747`, 1.1474125407255165`}, {
+             1.8098714799849451`, 1.809871479984945}}]}, 
+           InsetBox[
+            FormBox[
+             RowBox[{"-", "0.16666666666666666`"}], TraditionalForm], {
+            2.14110094961466, 1.4786420103552307`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{2.746729896400924, 1.8098714799849447`}, {
+             1.8098714799849451`, 1.809871479984945}}]}, 
+           InsetBox[
+            FormBox[
+             FractionBox["1", "3"], TraditionalForm], {2.2783006881929344`, 
+            1.809871479984945}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[{{3.61974295996989, 1.3249178785188582`}, {
+             2.746729896400924, 1.8098714799849447`}}]}, 
+           InsetBox[
+            FormBox["0.65`", TraditionalForm], {3.183236428185407, 
+            1.5673946792519016`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{3.6197429599698903`, 2.2948250814510307`}, {
+             2.746729896400924, 1.8098714799849447`}}]}, 
+           InsetBox[
+            FormBox["0.65`", TraditionalForm], {3.183236428185407, 
+            2.052348280717988}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{4.5246786999623625`, 1.0824410777858149`}, {
+             3.61974295996989, 1.3249178785188582`}}]}, 
+           InsetBox[
+            FormBox[
+             RowBox[{"-", "0.125`"}], TraditionalForm], {4.072210829966126, 
+            1.2036794781523366`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{4.5246786999623625`, 1.0824410777858149`}, {
+             3.6197429599698903`, 2.2948250814510307`}}]}, 
+           InsetBox[
+            FormBox[
+             RowBox[{"-", "0.125`"}], TraditionalForm], {4.072210829966126, 
+            1.6886330796184228`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{2.472330419244374, 2.4723304192443742`}, {
+             2.746729896400924, 1.8098714799849447`}}]}, 
+           InsetBox[
+            FormBox["0.2`", TraditionalForm], {2.6095301578226486`, 
+            2.1411009496146596`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{2.472330419244374, 2.4723304192443742`}, {
+             1.8098714799849451`, 1.809871479984945}}]}, 
+           InsetBox[
+            FormBox["0.16666666666666666`", TraditionalForm], {
+            2.1411009496146596`, 2.1411009496146596`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            
+            ArrowBox[{{2.0523482807179887`, 2.714807219977417}, {
+             1.8098714799849451`, 1.809871479984945}}]}, 
+           InsetBox[
+            FormBox["0.16666666666666666`", TraditionalForm], {
+            1.931109880351467, 2.262339349981181}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}, {{
+            Arrowheads[{{0.02, 0.8, {
+                GraphicsBox[
+                 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{-1., -0.31249915682968066`}, {-0.8749949409780775, \
+-8.881784197001252*^-16}, {-1., 0.3124991568296789}, {
+                  0., -8.881784197001252*^-16}}}]], 0.8749949409780782}}}], 
+            ArrowBox[
+             
+             BezierCurveBox[{{1.8098714799849451`, 1.809871479984945}, {
+              1.4864427219132532`, 1.5746864980402504`}, {1.409640989042357, 
+              1.5849836524699283`}, {1.3662901380653774`, 
+              1.6137264390857011`}, {1.3276462487881864`, 
+              1.7579473972702444`}, {1.3508177937020378`, 
+              1.8045148061435488`}, {1.4121814682080616`, 
+              1.8518332699017894`}, {1.8098714799849451`, 1.809871479984945}},
+               SplineDegree -> 7]]}, 
+           InsetBox[
+            FormBox["0.25`", TraditionalForm], {1.326908566840411, 
+            1.6804619574336848`}, 
+            ImageScaled[{0.5, 0.5}], BaseStyle -> "Graphics"]}}, {
+          Directive[
+           Hue[0.6, 0.2, 0.8], 
+           EdgeForm[
+            Directive[
+             GrayLevel[0], 
+             Opacity[0.7]]]], {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{1.3414422717769559`, 2.6212146683504427`}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"1", ",", "\"FEAR\""}], "}"}]], 
+            Annotation[#, {1, "FEAR"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"FEAR\"", TraditionalForm], {1.3414422717769559`, 
+            2.6212146683504427`}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{1.3249178785188587`, 3.61974295996989}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"2", ",", "\"usd\""}], "}"}]], 
+            Annotation[#, {2, "usd"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"usd\"", TraditionalForm], {1.3249178785188587`, 
+            3.61974295996989}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{0.48495360146608735`, 3.134789358503803}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"3", ",", "\"chnd\""}], "}"}]], 
+            Annotation[#, {3, "chnd"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"chnd\"", TraditionalForm], {0.48495360146608735`, 
+            3.134789358503803}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{0.9049357399924729, 2.052348280717989}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"4", ",", "\"geod\""}], "}"}]], 
+            Annotation[#, {4, "geod"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"geod\"", TraditionalForm], {0.9049357399924729, 
+            2.052348280717989}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{1.147412540725516, 1.147412540725516}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"5", ",", "\"ENT\""}], "}"}]], 
+            Annotation[#, {5, "ENT"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"ENT\"", TraditionalForm], {1.147412540725516, 
+            1.147412540725516}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             DiskBox[{0., 1.324917878518859}, 0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"6", ",", "\"uspub\""}], "}"}]], 
+            Annotation[#, {6, "uspub"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"uspub\"", TraditionalForm], {0., 1.324917878518859}, 
+            BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{0.4849536014660869, 0.4849536014660871}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"7", ",", "\"chnpub\""}], "}"}]], 
+            Annotation[#, {7, "chnpub"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"chnpub\"", TraditionalForm], {0.4849536014660869, 
+            0.4849536014660871}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             DiskBox[{1.3249178785188587`, 0.}, 0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"8", ",", "\"dipl\""}], "}"}]], 
+            Annotation[#, {8, "dipl"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"dipl\"", TraditionalForm], {1.3249178785188587`, 0.}, 
+            BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{2.0523482807179882`, 0.9049357399924723}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"9", ",", "\"NUKE\""}], "}"}]], 
+            Annotation[#, {9, "NUKE"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"NUKE\"", TraditionalForm], {2.0523482807179882`, 
+            0.9049357399924723}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{2.4723304192443747`, 1.1474125407255165`}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"10", ",", "\"ShrdCult\""}], "}"}]], 
+            Annotation[#, {10, "ShrdCult"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"ShrdCult\"", TraditionalForm], {2.4723304192443747`, 
+            1.1474125407255165`}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{2.746729896400924, 1.8098714799849447`}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"11", ",", "\"INT\""}], "}"}]], 
+            Annotation[#, {11, "INT"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"INT\"", TraditionalForm], {2.746729896400924, 
+            1.8098714799849447`}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{3.61974295996989, 1.3249178785188582`}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"12", ",", "\"usecon\""}], "}"}]], 
+            Annotation[#, {12, "usecon"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"usecon\"", TraditionalForm], {3.61974295996989, 
+            1.3249178785188582`}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{3.6197429599698903`, 2.2948250814510307`}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"13", ",", "\"chnecon\""}], "}"}]], 
+            Annotation[#, {13, "chnecon"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"chnecon\"", TraditionalForm], {3.6197429599698903`, 
+            2.2948250814510307`}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{4.5246786999623625`, 1.0824410777858149`}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"14", ",", "\"econdep\""}], "}"}]], 
+            Annotation[#, {14, "econdep"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"econdep\"", TraditionalForm], {4.5246786999623625`, 
+            1.0824410777858149`}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{2.472330419244374, 2.4723304192443742`}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"15", ",", "\"allyTangle\""}], "}"}]], 
+            Annotation[#, {15, "allyTangle"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"allyTangle\"", TraditionalForm], {2.472330419244374, 
+            2.4723304192443742`}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{2.0523482807179887`, 2.714807219977417}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"16", ",", "\"shi\""}], "}"}]], 
+            Annotation[#, {16, "shi"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"shi\"", TraditionalForm], {2.0523482807179887`, 
+            2.714807219977417}, BaseStyle -> "Graphics"]}, {
+           TagBox[
+            TooltipBox[
+             
+             DiskBox[{1.8098714799849451`, 1.809871479984945}, 
+              0.08971641627122594], 
+             RowBox[{"{", 
+               RowBox[{"17", ",", "\"WAR*\""}], "}"}]], 
+            Annotation[#, {17, "WAR*"}, "Tooltip"]& ], 
+           InsetBox[
+            FormBox["\"WAR*\"", TraditionalForm], {1.8098714799849451`, 
+            1.809871479984945}, BaseStyle -> "Graphics"]}}}], 
+       MouseAppearanceTag["NetworkGraphics"]], AllowKernelInitialization -> 
+      False]], {
+    FormatType -> TraditionalForm, FrameTicks -> None, ImageSize -> 864, 
+     DefaultBaseStyle -> {
+      "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
+       Hue[0.8, 1., 0.6]}}]},
+  "RowDefault"]], "Output",
+ CellChangeTimes->{3.738960334943709*^9}]
+}, Open  ]]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Thucydides Trap: Explore Evolutions", "Subsection",
+ CellChangeTimes->{{3.671315676317874*^9, 3.6713156892642612`*^9}, {
+  3.722086533362556*^9, 3.722086539057061*^9}, {3.722976616440687*^9, 
+  3.7229766230562553`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Propagation Tests", "Subsubsection",
+ CellChangeTimes->{{3.6713776593973637`*^9, 3.671377664664629*^9}, {
+  3.6713863009364157`*^9, 3.671386302208514*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"inp", " ", "=", 
+  RowBox[{"ConstantArray", "[", 
+   RowBox[{"0", ",", "n"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"mask", "=", 
+  RowBox[{"ConstantArray", "[", 
+   RowBox[{"0", ",", "n"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"inp", "\[LeftDoubleBracket]", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "5", ",", "11"}], "}"}], "\[RightDoubleBracket]"}], 
+   " ", "=", " ", "1"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"inp", "\n"}], "\[IndentingNewLine]", 
+ RowBox[{"FCMpass", "[", 
+  RowBox[{"trapFCM", ",", "inp"}], "]"}], "\n", 
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"FCMEvolSeq", "[", 
+    RowBox[{"trapFCM", ",", "inp", ",", "mask"}], "]"}], "*)"}]}]}], "Input",
+ CellChangeTimes->{{3.722087608626405*^9, 3.722087617539381*^9}, {
+   3.722087658458343*^9, 3.722087808233233*^9}, {3.722087849251143*^9, 
+   3.722087849618454*^9}, {3.722976634170573*^9, 3.722976642514476*^9}, 
+   3.734214081374496*^9, 3.735586641223337*^9}]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Illustrations", "Subsection",
+ CellChangeTimes->{{3.67131531677206*^9, 3.6713153245909224`*^9}, {
+  3.6713897892186623`*^9, 3.671389796522579*^9}, {3.722088091658976*^9, 
+  3.722088093387026*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"trapfig", "=", 
+    RowBox[{"Graph", "[", "\[IndentingNewLine]", 
+     RowBox[{"trapFCM", ",", "\[IndentingNewLine]", 
+      RowBox[{"GraphLayout", "\[Rule]", "\"\<RadialEmbedding\>\""}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"EdgeLabelStyle", "\[Rule]", " ", 
+       RowBox[{"Directive", "[", "14", "]"}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{"EdgeStyle", "\[Rule]", "Thick"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"EdgeShapeFunction", "\[Rule]", 
+       RowBox[{"GraphElementData", "[", 
+        RowBox[{"{", 
+         RowBox[{"\"\<HalfFilledArrow\>\"", ",", 
+          RowBox[{"\"\<ArrowSize\>\"", "\[Rule]", "0.04"}]}], "}"}], "]"}]}], 
+      ",", "\[IndentingNewLine]", 
+      RowBox[{"VertexLabels", "\[Rule]", 
+       RowBox[{"PropertyValue", "[", 
+        RowBox[{"trapFCM", ",", " ", "VertexLabels"}], "]"}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"VertexLabelStyle", "\[Rule]", 
+       RowBox[{"Directive", "[", 
+        RowBox[{"Purple", ",", "Italic", ",", "20"}], "]"}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"VertexShape", "\[Rule]", 
+       RowBox[{"Graphics", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"EdgeForm", "[", "Thick", "]"}], ",", "LightBlue", ",", 
+          RowBox[{"Disk", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0"}], "}"}], ",", 
+            RowBox[{"0.5", "\[Times]", 
+             RowBox[{"{", 
+              RowBox[{"1.5", ",", "1"}], "}"}]}]}], "]"}]}], "}"}], "]"}]}], 
+      ",", "\[IndentingNewLine]", 
+      RowBox[{"VertexSize", "\[Rule]", "0.6"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"ImageSize", "\[Rule]", 
+       RowBox[{"72", "\[Times]", "15"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+   ";"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Export", "[", 
+    RowBox[{
+    "\"\<thucy-trap.eps\>\"", ",", " ", "trapfig", ",", " ", "\"\<EPS\>\""}], 
+    "]"}], "*)"}], "\n"}], "\[IndentingNewLine]", 
+ RowBox[{"trapmtx", "=", 
+  RowBox[{"MatrixPlot", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"FCMat", "@", "trapFCM"}], ",", " ", "\[IndentingNewLine]", 
+    RowBox[{"ImageSize", "\[Rule]", 
+     RowBox[{"14", "\[Times]", "72"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"ImageMargins", "\[Rule]", "0"}], ",", 
+    RowBox[{"Mesh", "\[Rule]", "All"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Frame", "\[Rule]", "True"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"FrameTicks", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{"None", ",", "None"}], "}"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"PlotLegends", "\[Rule]", "Automatic"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"PlotLabel", "\[Rule]", 
+     RowBox[{"Style", "[", 
+      RowBox[{
+      "\"\<Intensity Plot:Thucydides Trap Adjacency Matrix\>\"", ",", " ", 
+       "32", ",", " ", "Bold"}], "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Export", "[", 
+    RowBox[{"\"\<fcm-trap-mtx.eps\>\"", ",", "trapmtx", ",", "\"\<EPS\>\""}], 
+    "]"}], "*)"}]}]}], "Input",
+ CellChangeTimes->{{3.722088169120878*^9, 3.722088320520913*^9}, {
+   3.722088351763085*^9, 3.722088376004768*^9}, 3.7220884212498093`*^9, {
+   3.722088482504051*^9, 3.72208849106638*^9}, 3.7220886702721767`*^9, {
+   3.722088722835853*^9, 3.722088737940887*^9}, 3.722847136907343*^9, {
+   3.722976347963355*^9, 3.722976356754158*^9}, {3.722976476924171*^9, 
+   3.722976561093134*^9}, {3.734121501558704*^9, 3.734121529416741*^9}, {
+   3.734213776445507*^9, 3.734213779152945*^9}, 3.738960348990123*^9}],
+
+Cell[BoxData[
+ TemplateBox[{GraphicsBox[{
+     RasterBox[CompressedData["
+1:eJxTTMoPSmVmYGAQhGIQGwI+2I/SA0Ov7j65jb30jf2Dw0V6qZ+e2k8qWfrE
+Ku/CgLtrpNOV/6xqP614ay9ypdN94adX9h1beEJDJB4PuLvoTU9aZBHpqPzW
+fmLxp+2+b17Yr8ua0fxS6c5ovAxS+sTClqppMk/szbgurTkd+dL+2rrZE9v4
+3+AUH2j3Dlf6YZXIOveHt6B8GBh4d410ejReRml8tL0AB8O1Ra/t03y0+w2i
+H9lf6IsIYCtfNODuGun09+M7P7d53LJf/OV6oknmU/sn8304VXa8HHB3jXR6
+7yEhxfmLrtgffO55I/bxI/t3SSWNqy1e0dze0fbM4KZH69nBSY/Gy9CiccXX
+SIlHXO2x0fJ/YGlC9f5ISZ9DjR6Nl6FFj/Tyn9Y0rvoFAMSKkbw=
+      "], {{0, 0}, {17, 
+      17}}, {0, 1}], {{Antialiasing -> False, 
+       GrayLevel[
+        NCache[-1 + GoldenRatio, 0.6180339887498949]], 
+       LineBox[{{{0, 17}, {17, 17}}, {{0, 16}, {17, 16}}, {{0, 15}, {17, 
+        15}}, {{0, 14}, {17, 14}}, {{0, 13}, {17, 13}}, {{0, 12}, {17, 
+        12}}, {{0, 11}, {17, 11}}, {{0, 10}, {17, 10}}, {{0, 9}, {17, 9}}, {{
+        0, 8}, {17, 8}}, {{0, 7}, {17, 7}}, {{0, 6}, {17, 6}}, {{0, 5}, {17, 
+        5}}, {{0, 4}, {17, 4}}, {{0, 3}, {17, 3}}, {{0, 2}, {17, 2}}, {{0, 
+        1}, {17, 1}}, {{0, 0}, {17, 0}}}]}, {Antialiasing -> False, 
+       GrayLevel[
+        NCache[-1 + GoldenRatio, 0.6180339887498949]], 
+       LineBox[{{{0, 0}, {0, 17}}, {{1, 0}, {1, 17}}, {{2, 0}, {2, 17}}, {{3, 
+        0}, {3, 17}}, {{4, 0}, {4, 17}}, {{5, 0}, {5, 17}}, {{6, 0}, {6, 
+        17}}, {{7, 0}, {7, 17}}, {{8, 0}, {8, 17}}, {{9, 0}, {9, 17}}, {{10, 
+        0}, {10, 17}}, {{11, 0}, {11, 17}}, {{12, 0}, {12, 17}}, {{13, 0}, {
+        13, 17}}, {{14, 0}, {14, 17}}, {{15, 0}, {15, 17}}, {{16, 0}, {16, 
+        17}}, {{17, 0}, {17, 17}}}]}}}, Frame -> True, 
+    FrameLabel -> {None, None}, FrameTicks -> {{None, None}, {None, None}}, 
+    GridLinesStyle -> Directive[
+      GrayLevel[0.5, 0.4]], ImageMargins -> 0, ImageSize -> 1008, 
+    Method -> {
+     "AxisPadding" -> Scaled[0.02], "DefaultBoundaryStyle" -> Automatic, 
+      "DefaultPlotStyle" -> Automatic, "DomainPadding" -> Scaled[0.02], 
+      "RangePadding" -> Scaled[0.05]}, PlotLabel -> FormBox[
+      StyleBox[
+      "\"Intensity Plot:Thucydides Trap Adjacency Matrix\"", 32, Bold, 
+       StripOnInput -> False], TraditionalForm]],FormBox[
+    FormBox[
+     TemplateBox[{
+       FormBox[
+        StyleBox[
+         StyleBox[
+          PaneBox[
+           GraphicsBox[{{}, {}, 
+             RasterBox[CompressedData["
+1:eJxll3k0VV34x0WU0ptIk5ShklJKIQ2+lCEpZChkjgyJMqu8lJJm9FZCZSxF
+MlVUCiWZyewa7nWv6w7n3Jumt0R+52e96/fP76y11z5nr7Oevff3efbzfLaS
+e4CVp5iIiEgd1aZR7X/fy6tklO5ntKNyxLTbiTkEgXvwmdwtPMQtm2lwpr8d
+Kv0dNRtEmJj50snmtAYP1icnXA8v6sD5T24vxBSYUJ5norpvFQ/LOr9EG1l3
+gFNDPujUZWK794YxBQUeeBs5aarXOmBWHnHr0QEmbN8ubhTI8lBytb9CsrYD
+T4rEY08HMXF8gVja21k8RHE/0flinZDOSQixiGfi4jEiMH4aD3uMPoo06XUi
+8K6Cp/ITJjLfdxi5/eRCLr1csSCiE+2Jj2y+1zJRLv92kaaQC/p4kX5iSSd0
+4rQMP7KZ6ArM4Yuyucizy3ENFnYiObJyU4oYC6O1CW/a+rgILbkbfWBNF8YD
+96n4K7IwW+lUQlYbFwbSN9K2eHbB2btHxmAHCyvDPTxC6riQ8ourWJLWhUon
+T9H5DiygeZ+OcSUXnTWR9PHeLqhYj46yQ1mwX6Uza2EpFxkqQSKDct2I3R3J
+KLvBQlCkYv9IPhfHorwVKy27wdkh2XqlgIWr7ZIFpdlcbKE56Wde7obZppsV
+Lo0sPFz79ezFVC5Edaxdz3/oxpPVSgWaPBYqz/bZOtzgoilxd7TXtB5IL3ty
+X3zGMGg91avXXuJih1hF0trLPWiL/S5asGkYPTWzNhxI4iLVasnGMYdeTHts
+uOeo/zAavLfZ7XjFxVh6cO3HNTRsaLyRsOrRMCok/aJXDHBhO9rkdnuMBufP
+Q90M5jCKHqfmzKb8UqKvNuZZ14crspqKd5exkW3W2PJFhQeZ+JjEzcn9eKV9
+xsvOno0kYuJnjzEPxwb714j5DoBj35Iv+w8bl6+uV6r04aFh/ZZ3rbqDWBi5
+/EdTExt/r3cxzbnCgxxq17VMp8MozX/HJckRnGi+fuL6Ux6qjvyIeOFHR9C7
+8nNGhiM4fLziTugnHgKvqXy4105HOluqQSRqBAfmjVY6fedB6bmlTOx2Blok
+HWVfl43AtEiJZ7iIj6b+SOdjWQxMqOc6hH0bwXZrKxn1bXz8LZ772EZqCOqW
+Y+maGhxofDu7VdaZj3Xrun9sCx6CQ5Apl/ThQPlmsftYNB+9NuK7VPqGEHcr
+acOjLA7ma7MuMTL5uHRa8/osQyael42EeQxyMKNrfvHHD3zoZrnQRnOZGO7T
+frt8CaV7mBHtKZcPdv0V1R5ZFmREYiVoNlyQi0LFbksRuPW1LKjiFAsGKh37
+bl2n4rvswdq/NQgYyo+8fchk4bjxipv7qbhsc+iy9rQi8GXnfKnrZsO46xPU
+JyXOQ/XvGaf3hhDI8DWwCy2m/H2lSuUjeChN3ZK1KYmAZaJ/lpM8G2NP5x2N
+OclD3g6fhiWvCPwpS/lsGMPG6jbXIr1nPNwbuPNt2gCBJ4yP29X5bBz48fTX
+LyEPCVF1S7kiJBwlf8TJWo/g3OJJ/Wdr+Din+NuwRYXErI0qHWMvR1C03Tzu
+uCcfoZVrj70wJlFmZ6k0pMwBw+Vu89o0PnzdHW/e8yHhHR15rPYSB3NjiAUj
+vXw4iV0tP3+FxIKcx2UFXzjY8WCbc4YcAYus8mG/pySqm7vEkxy4OFp7KdvJ
+ksBOI8Ecm08kgv+dbhVVxUUy0UMsukxAi71Me9t3EsrLNe8dWcNDzVy1ze3V
+BFZfsHBWXiRAq7ELb18iDz80w09dp/Yjvzo6VnKbANH+V7S1xnhYcaCmas82
+En/VFuR/dhJg/a2ys0vd+bCKWDBLIpSEiC+jsytagP5ydpNYHR/RqZ77KwtI
+fJ0lM/kmU4Arw7Ly/I0Enr4tSTrNJ8HO3an64IMAW+cYeH26Q6BvSIyus0qA
+nr1BFle5AnA3+xeXTSMxW8Ja9aurAA1kZliwlBBJjimTaZROW9Uy/PNTBHh7
+rf3+IQ0hjM59NItrJeG1d/SZT6cAhRriH3daCfE99/vtAF0BbgXoT6yYJ0RW
+i9ZntRCqb1NmHUgX4H3idUO6GWX3xJFF85KEEJl6Pv+//qqFtFLAfQESTu93
+nnVLAH4ud7XodQJpns9m+t8WwM3Wz6k+TICV14s+2+oTKD7l8NnvugAa6y84
+XrEXwDHwVOmjUT4+JEx2Hb0gwKRExqF9lL43bQ2jJzL46HmY9dY3SoDGwdcO
+fylQ+90yZ/d+Gz6IctOHPpTdu6Vd9s1/SEgs7ZybLc7HnzbBNe8AAY4lfLGL
+p5PQn7zX9fM5D/N4N0K9vATY7jvHbn8ViZNDXvf3elP+E9F1PuIigNSu1Qdl
+skgUV2/wSlvMg86CASPPgwL0yu860HaeBC/n1/pv1Hnaox6zzsNCgEffnGz/
+8SKhdKXqh8lpLpx2rpY7bCJAeGO4ja0piUMBl9+krOMiwK5x3A0C7H5ww3rB
+WhI3rWxihQMcnPUPZLnqCLAwKt+qS4pEk5aC+a54Dm6eW9jgoiHAyMHa/UkC
+AjMXs+VuG3CQk/y62FlVgOcbWJb2LQQwnt/P+zKCVwVuKU7LBTgnOWmxpIhA
+6GBYtl7WCJo+SMQ4LhTAZmixBe0GgYIq/WOJtiOg9+X6HporgMqrzeap1Pnn
+ZUtqsSVG8PWLpZXDDAG+3rDY53SQgMrFT+O6pWxISP7QtZ8kUeXnu3eZLgEn
+v5T3V33YWLw8RcnuXxIJRufNBpcQ+MfC4wpjCRvqWvqSB4UkXJal7Ukb56Ne
+c52NVsMwYDb82XaEhMa/L03dBvgQX/BD/mLkMKzcLnXbDJL409yxW7mCD71f
+b5h964fhEaZRYd1F6ZLz2YSZzkd434XcDXQWwq62P7RqJnHvzGyTrBg+it5a
+Bp1LYOFSZsT1/TUk/BxWGXtS+YSbsXhb904W7pYtC7N8S2LbJgOjVSZ8KMYO
+iap/Y6Kg+Z2zxQsqD0k5Go6s5sPBJ7cuKpuJd8PexuZU/uhlhe7KmcXHP3uD
+E9soTun4PWf9vockHpUn7PQheGjU2OGgOpMJzrxiub33SUTcyjNY08TDDFkJ
+5VNlQ/itajex5zaJ3QE1+nyqPun9aOI2+Q7hL70Jlul1Km/tHkJeAg8hPbcL
+lZcOQckmo2H3Ber8K07oHQviIf+1a0RoIwObfU1KTKJIPPu1UG+9LQ+c+2oG
+dX8zYBxNpBiHkRR3ae4QavOgHPNl5rINDNjfSogxCiBhk7tve8EiHhyPvGo5
+waDDL0/7qCEVryrnvLedGOMi0fRcUnUiHVFVNKtdLiRGHWO2alLcU6e+z3Wx
+IR2J3dFbdx4kUal1T/drORczFNUte3mDyBasVDawIBH/V9mWkvtcnGSXD57Z
+N4jS6fWS+iYkXEfadELOcCHIswhQKxhA3ZLjo3ogsaFCoK19mAu3IMafFpkB
+bJUc3NGiTaKecTiyw4CLmN70Q5ZB/VA5lDR/4zoS5ueJD5ULuSDOZHS3NvZB
+6sl+fgJVN9pXh0jnkxwcUsu0tV7dh+9/ZlV9WUzCvmHCPvkdB7UtmZ/az9Iw
+YPk+yVqaxEBAbGbsHQ62hGdZHOjvxceMyIASCRKHZeeSgQEcPFie3dCl04uC
+b9rGchMERp7f1nYx4kC6JtvUPrEHd4w/Lw39SsDXQTHaTJ6DCP8HH3qJbpxN
+evS1k0vg80ROrc7oCDhyD3c5mnTDj+dep0MnEJK+UXZFDcUb5Q8r+tO7YLt9
+aXpSJ4Exw5eO0ndHUO2Rs8NlvBN61zrCfjUQiOLsfDAeOIJNUo9e0g90QpV+
+zdzhHQGxK/VCzu4RpBY/0nEv7IC05u6Vr8oIxGrY6HYsG4HEocclzNkd+BUz
+bVy+gIBUW9/Zym9sBIvmbvQ80o6hjpefTj8gkBDq2fCkjg3mo9x8dkUb6lWD
+H/WnEliwRCCXnMaG1f68td7ybSiJWBetR+WLlPJQl9hQNip+5uVwQz7hbj37
+wP2LBJa7TeYE7mVjTdqTlUdbWhGrkLZOJJriiOlxX5yV2Ug0yc8g1rQiIMB+
+ulsoVUdzpLeb/RzGNGH+cv/zLbCvlKFV+lG8YHbnvE7TMAbVXXQH3zZjp2xD
+ofJhAppCpWaVrGGUn3LdNBTchLWe5+Ni7Am8SHy8SPrkMJLr3NYNqzVi/gs9
+F5YFgW3am9zHLYbht/iwKmegHhMzf2oZGRN40/Mql7NyGHreHkr8G3VgOxRK
+PdhO8VGk4ff23ywsfeEpL9hdi+Y8X6bEJgK1io16la0sjIl7yY1O1KD0j8pL
+LzUC5u9t4548ZKHTxnvut6IPSLfsj/+4nECb10DrnUgWSjJ9JP/1qsbljFte
+agsI2M32ko+1ZiH+i6/Y2NL3CPpmoXeJ4rXefKFHoBoLdgZ+E+OtVXA0lpTj
+ixJwtQrPd55kQjv+2L+TsZUwSqrim/3iY/i7yM89HUzIDPqPim6vgAbvVFWe
+kOKhOxcNdChOpB+id84eKsei7Vp35rD5EG6XuaxyhonUX0N18/a+wrRrggD/
+Pj6C6cntcw8yYXN7+M3C56XgDT40bv7Ex48YlWXj6kywNnOKFBSfo22jm8KG
+Wj5Oq+Z5cUSZSPvEe6ByqRivY5Z8i3/Lx7T6zYXt3UOwO04mq30rQHZHW93o
+Mz5i/cvHKvKHsHopXcHldR6uqV5Nt8rjY7aMseGTc0NIOjgsfjT+IcIijMOL
+qXoe/6zp6h2HIUjf4JGhHhlwrZ80n3+HDxn7g13nNwzBNXUwV/xEMkwVylaG
+XOcjaXxQMVBiCPqyvFMKi+Ph3rLiRfglPuz9P/UlDzBAV2C5F/iehiAz6E0n
+xdclFwv7vKoZOGqpEjmj9hROhlVVby7nQzo7vm9zHgM/zrrfdlY9BXGzeY2J
+nXz4VQT0TbvBwJln6YXPzp/EjWWu7Z8pnT/QzPuaIhiYxqHXS7EisPxLPs1c
+koDyv+v6UlwZuLJEkX14ZwQeV08M5SkT+FtmTp+3CQML97mIvEoLh/advbxZ
+VLz1riNoWusZyIi6t0RmMoyqoymj3rYUd5rW00TlGFhX1L/ZxykM5vq8nx/8
+qXPq8ZjW/JuOUtZSi4pXoaDJ6oqsjCPAj7pISx2iY8tCR5+FS0LhNXJhRkw6
+AZMUb5pPLR3vTFNi/MND8PVl51+MlwQyn5vQtAvoMD/de7e6MxhR11YuQDuB
+ydZVNLHbdPTkLy5dqhWMWe7BCndJAodIcVpLJB0eDLtPQTeCcEvr3YrfVJ58
+PnO4964HHQLZJKJuNBArJGXU7RVJzFvxvtfXjI4A4y4JZctAPO1z3fRCl6q/
+yOzV0aRjLHyBUkT+CWwreLpVzprER4ezvdMX03Eu13Zbi9QJ1MT8MQjyo+oj
+UVWSOTkI6YF/bFWPHof1wX2mrRRviaicKdnROAgtpZzB8cQADKxJtdSg6uwL
+e5R0JQ/CLHbV/FwLf/j94R28WkrNGz9RfMKbGudn7baXOoafrboufIp7VWpe
+Fc/WHoTbVDwcxbnsuCOmFGfTJiKKs8UGETbld1/Mjeg69nC6AImbtxSjdQBX
+p/zrg5S9q0LElwmw5+iPop57A//50QuqiiGnD1P8JppRUhTkN/Cfv46g5Ou7
+mEpLitO6A4vmbKXGp/ziCf0amcvLfQXwn7ux6OGMATRN6e+BhmS3xMgYio+N
+hYUGHf1gTensDjv/gju0VOrecPpJIS2j/z893cAymEzTfS7AP8VHC0OO9/+n
+mysC5MxzbjcLsJenVjhXrx97p/RxxgQn9el3jgAiSpyCR7Op8SkdDiHuNf+5
+tagQpQcfFOzq6UP41H7tMT9+65tCeSGOX/Mo6H/Qh6ypfR1A2uGL1XO1hFCt
+Vi4IC+5Dy9T6baCu091wzFyIwd/0p/N29mF8ap37UTpLtb3eS4hbmvef5s7t
+g+XUesxhNBBCUzsjhJmP01Ojfhosp+Y1RWvh+6ELyUKIpsk/HXxMQ86UfUM4
+npflDRcL8bKzJz8inAaRKTt64Ni5j+5qFCJwTlK+rDENBVP/b0aweuHPdLYQ
+awwP5D+RpaFianzF/91XGCfn55swev/7FhH5H9fyo1c=
+              "], {{
+                Rational[-15, 2], -504}, {
+                Rational[15, 2], 504}}], {Antialiasing -> False, 
+              AbsoluteThickness[0.1], 
+              Directive[
+               Opacity[0.3], 
+               GrayLevel[0]], 
+              LineBox[
+               NCache[{{
+                  Rational[15, 2], -504}, {
+                  Rational[-15, 2], -504}, {
+                  Rational[-15, 2], 504}, {
+                  Rational[15, 2], 504}, {
+                  Rational[15, 2], -504}}, {{
+                 7.5, -504}, {-7.5, -504}, {-7.5, 504}, {7.5, 504}, {
+                 7.5, -504}}]]}, {
+              CapForm[None], {}}, {Antialiasing -> False, 
+              StyleBox[
+               
+               LineBox[{{7.500000000000001, -503.99999999999994`}, {
+                7.500000000000001, 504.00000000000006`}}], 
+               Directive[
+                AbsoluteThickness[0.2], 
+                Opacity[0.3], 
+                GrayLevel[0]], StripOnInput -> False], 
+              StyleBox[
+               StyleBox[{{
+                  StyleBox[
+                   LineBox[{{{7.500000000000001, -501.75449564937145`}, 
+                    Offset[{4., 0}, {
+                    7.500000000000001, -501.75449564937145`}]}, {{
+                    7.500000000000001, -340.078182404125}, 
+                    
+                    Offset[{4., 0}, {
+                    7.500000000000001, -340.078182404125}]}, {{
+                    7.500000000000001, -178.4018691588785}, 
+                    
+                    Offset[{4., 0}, {
+                    7.500000000000001, -178.4018691588785}]}, {{
+                    7.500000000000001, -10.426024442846844`}, 
+                    
+                    Offset[{4., 0}, {
+                    7.500000000000001, -10.426024442846844`}]}, {{
+                    7.500000000000001, 157.54982027318482`}, 
+                    
+                    Offset[{4., 0}, {7.500000000000001, 
+                    157.54982027318482`}]}, {{7.500000000000001, 
+                    336.02415528396835`}, 
+                    
+                    Offset[{4., 0}, {7.500000000000001, 
+                    336.02415528396835`}]}, {{7.500000000000001, 
+                    504.00000000000006`}, 
+                    
+                    Offset[{4., 0}, {7.500000000000001, 
+                    504.00000000000006`}]}}], 
+                   Directive[
+                    AbsoluteThickness[0.2], 
+                    GrayLevel[0.4]], StripOnInput -> False]}, 
+                 StyleBox[
+                  StyleBox[{{
+                    StyleBox[{
+                    InsetBox[
+                    FormBox[
+                    TagBox[
+                    InterpretationBox["\"-0.24\"", -0.24, AutoDelete -> True],
+                     NumberForm[#, {
+                    DirectedInfinity[1], 2}]& ], TraditionalForm], 
+                    
+                    Offset[{7., 0.}, {
+                    7.500000000000001, -501.75449564937145`}], {-1, 0.}, 
+                    Automatic, {1, 0}], 
+                    InsetBox[
+                    FormBox[
+                    TagBox[
+                    InterpretationBox["\"-0.12\"", -0.12, AutoDelete -> True],
+                     NumberForm[#, {
+                    DirectedInfinity[1], 2}]& ], TraditionalForm], 
+                    
+                    Offset[{7., 0.}, {
+                    7.500000000000001, -340.078182404125}], {-1, 0.}, 
+                    Automatic, {1, 0}], 
+                    InsetBox[
+                    FormBox["0", TraditionalForm], 
+                    Offset[{7., 0.}, {
+                    7.500000000000001, -178.4018691588785}], {-1, 0.}, 
+                    Automatic, {1, 0}], 
+                    InsetBox[
+                    FormBox[
+                    TagBox[
+                    InterpretationBox["\"0.16\"", 0.16, AutoDelete -> True], 
+                    NumberForm[#, {
+                    DirectedInfinity[1], 2}]& ], TraditionalForm], 
+                    
+                    Offset[{7., 0.}, {
+                    7.500000000000001, -10.426024442846844`}], {-1, 0.}, 
+                    Automatic, {1, 0}], 
+                    InsetBox[
+                    FormBox[
+                    TagBox[
+                    InterpretationBox["\"0.32\"", 0.32, AutoDelete -> True], 
+                    NumberForm[#, {
+                    DirectedInfinity[1], 2}]& ], TraditionalForm], 
+                    
+                    Offset[{7., 0.}, {7.500000000000001, 
+                    157.54982027318482`}], {-1, 0.}, Automatic, {1, 0}], 
+                    InsetBox[
+                    FormBox[
+                    TagBox[
+                    InterpretationBox["\"0.49\"", 0.49, AutoDelete -> True], 
+                    NumberForm[#, {
+                    DirectedInfinity[1], 2}]& ], TraditionalForm], 
+                    
+                    Offset[{7., 0.}, {7.500000000000001, 
+                    336.02415528396835`}], {-1, 0.}, Automatic, {1, 0}], 
+                    InsetBox[
+                    FormBox[
+                    TagBox[
+                    InterpretationBox["\"0.65\"", 0.65, AutoDelete -> True], 
+                    NumberForm[#, {
+                    DirectedInfinity[1], 2}]& ], TraditionalForm], 
+                    
+                    Offset[{7., 0.}, {7.500000000000001, 
+                    504.00000000000006`}], {-1, 0.}, Automatic, {1, 0}]}, 
+                    Directive[
+                    AbsoluteThickness[0.2], 
+                    GrayLevel[0.4]], {
+                    Directive[
+                    Opacity[1]]}, StripOnInput -> False]}, {}}, {
+                    Directive[
+                    Opacity[1]]}, StripOnInput -> False], "GraphicsLabel", 
+                  StripOnInput -> False]}, "GraphicsTicks", StripOnInput -> 
+                False], 
+               Directive[
+                AbsoluteThickness[0.2], 
+                Opacity[0.3], 
+                GrayLevel[0]], StripOnInput -> False]}}, PlotRangePadding -> 
+            Scaled[0.02], PlotRange -> All, Frame -> True, 
+            FrameTicks -> {{False, False}, {True, False}}, FrameStyle -> 
+            Opacity[0], FrameTicksStyle -> Opacity[0], 
+            ImageSize -> {Automatic, 1008}, BaseStyle -> {}], Alignment -> 
+           Left, AppearanceElements -> None, ImageMargins -> {{5, 5}, {5, 5}},
+            ImageSizeAction -> "ResizeToFit"], LineIndent -> 0, StripOnInput -> 
+          False], {FontFamily -> "Arial"}, Background -> Automatic, 
+         StripOnInput -> False], TraditionalForm]}, "BarLegend", 
+      DisplayFunction -> (#& ), 
+      InterpretationFunction :> (RowBox[{"BarLegend", "[", 
+         RowBox[{
+           RowBox[{"{", 
+             RowBox[{
+               RowBox[{
+                 RowBox[{"Blend", "[", 
+                   
+                   RowBox[{
+                    "System`PlotThemeDump`$ThemeDefaultMatrix", ",", "#1"}], 
+                   "]"}], "&"}], ",", 
+               RowBox[{"{", 
+                 RowBox[{"0.26143226919758417`", ",", "1.`"}], "}"}]}], "}"}],
+            ",", 
+           RowBox[{"LabelStyle", "\[Rule]", 
+             RowBox[{"{", "}"}]}], ",", 
+           RowBox[{"LegendLayout", "\[Rule]", "\"Column\""}], ",", 
+           RowBox[{"LegendMarkerSize", "\[Rule]", "1008"}], ",", 
+           RowBox[{"Ticks", "\[Rule]", 
+             RowBox[{"{", 
+               RowBox[{
+                 RowBox[{"{", 
+                   RowBox[{"0.38153878194638663`", ",", 
+                    RowBox[{"-", "0.12`"}]}], "}"}], ",", 
+                 RowBox[{"{", 
+                   RowBox[{"0.5`", ",", "0.`"}], "}"}], ",", 
+                 RowBox[{"{", 
+                   RowBox[{"0.26307756389277326`", ",", 
+                    RowBox[{"-", "0.24`"}]}], "}"}], ",", 
+                 RowBox[{"{", 
+                   RowBox[{"0.6230769230769231`", ",", "0.16`"}], "}"}], ",", 
+                 
+                 RowBox[{"{", 
+                   RowBox[{"0.7461538461538462`", ",", "0.32`"}], "}"}], ",", 
+                 
+                 RowBox[{"{", 
+                   RowBox[{"0.8769230769230769`", ",", "0.49`"}], "}"}], ",", 
+                 
+                 RowBox[{"{", 
+                   RowBox[{"1.`", ",", "0.65`"}], "}"}]}], "}"}]}], ",", 
+           RowBox[{"\"PinningPoint\"", "\[Rule]", "0.5`"}], ",", 
+           RowBox[{"\"SmoothRange\"", "\[Rule]", "False"}], ",", 
+           RowBox[{"Charting`TickSide", "\[Rule]", "Right"}], ",", 
+           RowBox[{"ColorFunctionScaling", "\[Rule]", "False"}]}], "]"}]& )], 
+     TraditionalForm], TraditionalForm]},
+  "Legended",
+  DisplayFunction->(GridBox[{{
+      TagBox[
+       ItemBox[
+        PaneBox[
+         TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+         BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+       "SkipImageSizeLevel"], 
+      ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+    GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+    AutoDelete -> False, GridBoxItemSize -> Automatic, 
+    BaselinePosition -> {1, 1}]& ),
+  Editable->True,
+  InterpretationFunction->(RowBox[{"Legended", "[", 
+     RowBox[{#, ",", 
+       RowBox[{"Placed", "[", 
+         RowBox[{#2, ",", "After"}], "]"}]}], "]"}]& )]], "Output",
+ CellChangeTimes->{3.738960349641655*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Continuous Activation Exploration", "Section",
+ CellChangeTimes->{{3.68021667708936*^9, 3.68021669628125*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Engineered Masks + Vertex Leverage Analysis", "Subsubsection",
+ CellChangeTimes->{{3.6803836601851892`*^9, 3.68038367482589*^9}, {
+  3.6803838015524282`*^9, 3.680383823309988*^9}, {3.681148446003057*^9, 
+  3.68114844866434*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Plot", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Max", "[", 
+    RowBox[{"0", ",", 
+     RowBox[{"LogisticSigmoid", "[", 
+      RowBox[{
+       RowBox[{"7.5", "t"}], "-", "2.5"}], "]"}]}], "]"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"t", ",", " ", 
+     RowBox[{"-", "0.2"}], ",", " ", "1.2"}], "}"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"GridLines", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0.5", ",", "1"}], "}"}], ",", " ", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0.5", ",", "1"}], "}"}]}], "}"}]}]}], 
+  "\[IndentingNewLine]", "]"}]], "Input",
+ CellChangeTimes->{{3.726890789681773*^9, 3.726890864014565*^9}, {
+  3.726890896439292*^9, 3.726890919542745*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"evcnt", "=", 
+   RowBox[{"Round", "[", 
+    RowBox[{
+     RowBox[{"EigenvectorCentrality", "@", "trapFCM"}], ",", " ", "0.001"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"bwcnt", " ", "=", " ", 
+   RowBox[{"Round", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"#", "/", 
+         RowBox[{"Total", "[", "#", "]"}]}], ")"}], "&"}], "@", 
+      RowBox[{"BetweennessCentrality", "@", "trapFCM"}]}], ",", " ", 
+     "0.001"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"clcnt", " ", "=", " ", 
+    RowBox[{"Round", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"#", "/", 
+          RowBox[{"Total", "[", "#", "]"}]}], ")"}], "&"}], "@", 
+       RowBox[{"ClosenessCentrality", "@", "trapFCM"}]}], ",", " ", "0.001"}],
+      "]"}]}], ";"}], "\[IndentingNewLine]"}], "\n", 
+ RowBox[{"Row", "@", 
+  RowBox[{"{", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"TableForm", "[", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Transpose", "[", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+          RowBox[{";;", ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2", ",", "3"}], "}"}]}], 
+          "\[RightDoubleBracket]"}], "]"}], "~", "Join", "~", 
+        RowBox[{"{", 
+         RowBox[{"evcnt", ",", "bwcnt", ",", " ", "clcnt"}], "}"}]}], "]"}], 
+      ",", "\[IndentingNewLine]", 
+      RowBox[{"TableHeadings", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"None", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Style", "[", 
+            RowBox[{"#", ",", "Bold"}], "]"}], "&"}], "/@", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<\>\"", ",", " ", "\"\<Label\>\"", ",", 
+            "\"\<Full Description\>\"", ",", "\"\<Eig.\>\"", ",", " ", 
+            "\"\<Bwc.\>\"", ",", " ", "\"\<Close\>\""}], "}"}]}]}], "}"}]}]}],
+      "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Graph", "[", 
+     RowBox[{"trapFCM", ",", "\[IndentingNewLine]", 
+      RowBox[{"GraphLayout", "\[Rule]", "\"\<RadialEmbedding\>\""}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"ImageSize", "\[Rule]", 
+       RowBox[{"72", "\[Times]", "6"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+   "\[IndentingNewLine]", "}"}]}]}], "Input",
+ CellChangeTimes->{{3.6803664396879873`*^9, 3.680366452600029*^9}, {
+   3.680366499359906*^9, 3.6803665146143847`*^9}, {3.68036654942942*^9, 
+   3.680366622750373*^9}, {3.68036673349063*^9, 3.6803667366259327`*^9}, {
+   3.68036762770149*^9, 3.680367631412798*^9}, {3.680368362072748*^9, 
+   3.680368403489719*^9}, 3.726878422916349*^9, {3.726878466545868*^9, 
+   3.726878511052216*^9}, {3.7268820753284492`*^9, 3.726882157135726*^9}, {
+   3.726882296058524*^9, 3.726882323849894*^9}, {3.726882496098742*^9, 
+   3.7268825300752573`*^9}, {3.726882572923977*^9, 3.7268825769951077`*^9}, {
+   3.726882654638468*^9, 3.726882660581834*^9}, {3.726883070118458*^9, 
+   3.726883072188833*^9}, {3.7268833608164997`*^9, 3.726883365776696*^9}, {
+   3.726883592845236*^9, 3.7268836262093983`*^9}, {3.72688594573158*^9, 
+   3.726885969061095*^9}, {3.72688756768291*^9, 3.7268875986071787`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"4", ":", "geod"}], ",", " ", 
+    RowBox[{"8", ":", "dipl"}], ",", " ", 
+    RowBox[{"14", ":", 
+     RowBox[{"econdep", " ", "-", " ", 
+      RowBox[{
+       RowBox[{"highest", "/", "equal"}], " ", "closeness", " ", "centrality",
+        " ", "\[IndentingNewLine]", "15"}]}], ":", 
+     RowBox[{"ally", " ", "next", " ", "up"}]}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"egmask0", " ", "=", " ", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+      "0", ",", "1", ",", "0", ",", "1", ",", "\[IndentingNewLine]", "0", ",",
+        "1", ",", "0", ",", "1", ",", "\[IndentingNewLine]", "1", ",", "0", 
+       ",", "0", ",", "0", ",", "\[IndentingNewLine]", "1", ",", "1", ",", 
+       "0", ",", "0", ",", "\[IndentingNewLine]", "0"}], 
+      "\[IndentingNewLine]", "}"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"egmask", " ", "=", " ", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+      "0", ",", "1", ",", "0", ",", "1", ",", "\[IndentingNewLine]", "1", ",",
+        "0", ",", "0", ",", "0", ",", "\[IndentingNewLine]", "0", ",", "0", 
+       ",", "1", ",", "0", ",", "\[IndentingNewLine]", "1", ",", "0", ",", 
+       "0", ",", "0", ",", "\[IndentingNewLine]", "0"}], 
+      "\[IndentingNewLine]", "}"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"eg2mask", " ", "=", " ", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+      "0", ",", "1", ",", "0", ",", "1", ",", "\[IndentingNewLine]", "1", ",",
+        "0", ",", "0", ",", "1", ",", "\[IndentingNewLine]", "0", ",", "0", 
+       ",", "1", ",", "0", ",", "\[IndentingNewLine]", "1", ",", "0", ",", 
+       "0", ",", "0", ",", "\[IndentingNewLine]", "0"}], 
+      "\[IndentingNewLine]", "}"}]}], ";"}], "  ", 
+   RowBox[{"(*", " ", 
+    RowBox[{"dipl", " ", "intervene"}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"eg3mask", " ", "=", " ", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+      "0", ",", "1", ",", "0", ",", "1", ",", "\[IndentingNewLine]", "1", ",",
+        "0", ",", "0", ",", "0", ",", "\[IndentingNewLine]", 
+       RowBox[{"-", "1"}], ",", "0", ",", "1", ",", "0", ",", 
+       "\[IndentingNewLine]", "1", ",", "1", ",", "0", ",", "0", ",", 
+       "\[IndentingNewLine]", "0"}], "\[IndentingNewLine]", "}"}]}], ";"}], 
+   " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"econ", " ", "dep", " ", "intervene"}], ",", " ", 
+     RowBox[{"no", " ", "nukes"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"eg4mask", " ", "=", " ", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+      "0", ",", "1", ",", "0", ",", "1", ",", "\[IndentingNewLine]", "1", ",",
+        "0", ",", "0", ",", "0", ",", "\[IndentingNewLine]", "1", ",", "1", 
+       ",", "1", ",", "0", ",", "\[IndentingNewLine]", "1", ",", "1", ",", 
+       "0", ",", "0", ",", "\[IndentingNewLine]", "0"}], 
+      "\[IndentingNewLine]", "}"}]}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"econ", " ", "dep", " ", "intervene"}], ",", " ", 
+     RowBox[{"with", " ", "nukes"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Grid", "[", 
+    RowBox[{
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"TableForm", "@", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Pick", "[", 
+             RowBox[{
+              RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+               RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", 
+              "egmask0", ",", "1"}], "]"}], ",", 
+            RowBox[{"Pick", "[", 
+             RowBox[{
+              RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+               RowBox[{";;", ",", "3"}], "\[RightDoubleBracket]"}], ",", 
+              "egmask0", ",", "1"}], "]"}]}], "}"}]}]}], "}"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"TableForm", "@", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Pick", "[", 
+             RowBox[{
+              RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+               RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", 
+              "egmask", ",", "1"}], "]"}], ",", 
+            RowBox[{"Pick", "[", 
+             RowBox[{
+              RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+               RowBox[{";;", ",", "3"}], "\[RightDoubleBracket]"}], ",", 
+              "egmask", ",", "1"}], "]"}]}], "}"}]}]}], "}"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"TableForm", "@", 
+          RowBox[{"Transpose", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Pick", "[", 
+              RowBox[{
+               RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", 
+               "eg2mask", ",", "1"}], "]"}], ",", 
+             RowBox[{"Pick", "[", 
+              RowBox[{
+               RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                RowBox[{";;", ",", "3"}], "\[RightDoubleBracket]"}], ",", 
+               "eg2mask", ",", "1"}], "]"}]}], "}"}], "]"}]}], ",", 
+         RowBox[{"Style", "[", 
+          RowBox[{
+           RowBox[{"TableForm", "@", 
+            RowBox[{"Transpose", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Pick", "[", 
+                RowBox[{
+                 RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                  RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", 
+                 "eg2mask", ",", 
+                 RowBox[{"-", "1"}]}], "]"}], ",", 
+               RowBox[{"Pick", "[", 
+                RowBox[{
+                 RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                  RowBox[{";;", ",", "3"}], "\[RightDoubleBracket]"}], ",", 
+                 "eg2mask", ",", 
+                 RowBox[{"-", "1"}]}], "]"}]}], "}"}], "]"}]}], ",", " ", 
+           "Red"}], "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"TableForm", "@", 
+          RowBox[{"Transpose", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Pick", "[", 
+              RowBox[{
+               RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", 
+               "eg3mask", ",", "1"}], "]"}], ",", 
+             RowBox[{"Pick", "[", 
+              RowBox[{
+               RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                RowBox[{";;", ",", "3"}], "\[RightDoubleBracket]"}], ",", 
+               "eg3mask", ",", "1"}], "]"}]}], "}"}], "]"}]}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Style", "[", 
+          RowBox[{
+           RowBox[{"TableForm", "@", 
+            RowBox[{"Transpose", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Pick", "[", 
+                RowBox[{
+                 RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                  RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", 
+                 "eg3mask", ",", 
+                 RowBox[{"-", "1"}]}], "]"}], ",", 
+               RowBox[{"Pick", "[", 
+                RowBox[{
+                 RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                  RowBox[{";;", ",", "3"}], "\[RightDoubleBracket]"}], ",", 
+                 "eg3mask", ",", 
+                 RowBox[{"-", "1"}]}], "]"}]}], "}"}], "]"}]}], ",", " ", 
+           "Red"}], "]"}]}], "}"}]}], "\[IndentingNewLine]", "}"}], ",", 
+     RowBox[{"Frame", "\[Rule]", "All"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->CompressedData["
+1:eJwdzlkowwEAx/GhWXKWNjOieaDGlqZcoWa5Uh4sSd4WmiQtRwx5MJOrpFHO
+tKbmCrWH/4wZYzw4syShTFoz5IolG//f/+HX5+lXX660obTal0ajcclBLdMk
+sdS5RLNvleUwPfvACO0j/A349SK1wL8rxj5UaWw9e6Teqs5eKJMZh6Dz3TwN
+c5VcHdyUn5rgKnH0DDk2/SscDh2NtpIKkj94UHc+L4U+J/3VUK+8uWradYlS
+NbeUoX9xDhikNHxDzmHiL6QtX3ogO6pE1ULaZTJRngZwBiARKx6E1wsrsjbS
+mEiCUiIcl8Mdt7YZ6mx2BXQ3NnZAQYJYDa3txZSZ8WXTcMk7PgPDxmSr8HEp
+Yg1mTBoJmL91tg6lohoz5D/lbVP/n7RjSBeKryGRw7dDTeCdE06pPREK9PR9
+siHdHGWAtQUjlG5mVreTVGHZVMF7Nu/B3+oSzWUdOaCkRP8CFUUrb7C1LvEX
+Ji1u+TFIWV4HA17Ee0KgYOI5HGrr5SyoDK4Q1pMWhr+nwH+0Uyf9
+  "]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Engineered", " ", "example", " ", "that", " ", "leads", " ", "diff", " ", 
+    "model", " ", "behavior"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Pick", "[", 
+      RowBox[{
+       RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+        RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", "egmask", 
+       ",", "1"}], "]"}], ",", " ", 
+     RowBox[{"Pick", "[", 
+      RowBox[{
+       RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+        RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", "egmask", 
+       ",", 
+       RowBox[{"-", "1"}]}], "]"}]}], "}"}], "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Pick", "[", 
+      RowBox[{
+       RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+        RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", "eg2mask", 
+       ",", "1"}], "]"}], ",", " ", 
+     RowBox[{"Pick", "[", 
+      RowBox[{
+       RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+        RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", "eg2mask", 
+       ",", 
+       RowBox[{"-", "1"}]}], "]"}]}], "}"}], "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Pick", "[", 
+      RowBox[{
+       RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+        RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", "eg3mask", 
+       ",", "1"}], "]"}], ",", " ", 
+     RowBox[{"Pick", "[", 
+      RowBox[{
+       RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+        RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", "eg3mask", 
+       ",", 
+       RowBox[{"-", "1"}]}], "]"}]}], "}"}], "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Pick", "[", 
+      RowBox[{
+       RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+        RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", "eg4mask", 
+       ",", "1"}], "]"}], ",", " ", 
+     RowBox[{"Pick", "[", 
+      RowBox[{
+       RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+        RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}], ",", "eg4mask", 
+       ",", 
+       RowBox[{"-", "1"}]}], "]"}]}], "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.6803775019401417`*^9, 3.6803775308732452`*^9}, {
+  3.680378334257473*^9, 3.68037833742418*^9}, {3.68037839509167*^9, 
+  3.680378424245483*^9}, {3.6803819986448393`*^9, 3.680382011918578*^9}, {
+  3.680382061856495*^9, 3.680382190029652*^9}, {3.6803822730473948`*^9, 
+  3.680382454513884*^9}, {3.680382830428795*^9, 3.6803828536508913`*^9}, {
+  3.6803832046581497`*^9, 3.6803833195996313`*^9}, {3.680383765307087*^9, 
+  3.680383788337769*^9}, {3.726878422966034*^9, 3.726878422982633*^9}, {
+  3.7271174110907297`*^9, 3.7271174489161587`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Comparisons", "Subsubsection",
+ CellChangeTimes->{{3.671814273224965*^9, 3.671814276527614*^9}, {
+  3.6801951298560877`*^9, 3.680195135222597*^9}, {3.680362090914942*^9, 
+  3.6803620946030073`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"logisticActvn", "[", "t_", "]"}], ":=", 
+     RowBox[{"Max", "[", 
+      RowBox[{"0", ",", 
+       RowBox[{"LogisticSigmoid", "[", 
+        RowBox[{
+         RowBox[{"7.5", "t"}], "-", "3.5"}], "]"}]}], "]"}]}], ";"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"logisticActvn", "[", "t_", "]"}], ":=", 
+     RowBox[{"Max", "[", 
+      RowBox[{"0", ",", 
+       RowBox[{"LogisticSigmoid", "[", 
+        RowBox[{
+         RowBox[{"7.5", "t"}], "-", "2.5"}], "]"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"SetAttributes", "[", 
+    RowBox[{"logisticActvn", ",", 
+     RowBox[{"{", 
+      RowBox[{"Listable", ",", "NumericFunction"}], "}"}]}], "]"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"linearActvn", "[", "t_", "]"}], ":=", 
+     RowBox[{"Min", "[", 
+      RowBox[{
+       RowBox[{"Max", "[", 
+        RowBox[{"0", ",", "t"}], "]"}], ",", "1"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"SetAttributes", "[", 
+    RowBox[{"linearActvn", ",", 
+     RowBox[{"{", 
+      RowBox[{"Listable", ",", "NumericFunction"}], "}"}]}], "]"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"fins", "=", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"FCMEvolSeq", "[", 
+            RowBox[{"#", ",", "inp", ",", "mask"}], "]"}], "&"}], ")"}], "/@",
+          "fcms"}], ")"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"res", "=", 
+       RowBox[{"Transpose", "@", 
+        RowBox[{"{", 
+         RowBox[{"fcms", ",", " ", "fins"}], "}"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Panel", "[", "$activationFxn", "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Row", "[", 
+       RowBox[{
+        RowBox[{"{", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"TableForm", "[", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"Transpose", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"inp", ",", " ", "mask"}], "}"}], "~", "Join", "~", 
+              RowBox[{"Chop", "[", 
+               RowBox[{
+                RowBox[{"SetAccuracy", "[", 
+                 RowBox[{
+                  RowBox[{"fins", "\[LeftDoubleBracket]", 
+                   RowBox[{";;", ",", 
+                    RowBox[{"-", "1"}], ",", ";;"}], 
+                   "\[RightDoubleBracket]"}], ",", "3"}], "]"}], ",", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "2"}]]}], "]"}]}], "]"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"TableHeadings", "\[Rule]", 
+             RowBox[{"{", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"MapThread", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"Style", "[", 
+                   RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"#1", "<>", "#2", "<>", "#3"}], ")"}], ",", " ", 
+                    "14"}], "]"}], "&"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                    RowBox[{";;", ",", "3"}], "\[RightDoubleBracket]"}], ",", 
+                   
+                   RowBox[{"ConstantArray", "[", 
+                    RowBox[{"\"\<|\>\"", ",", " ", "n"}], "]"}], ",", 
+                   RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                    RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}]}], 
+                  "}"}]}], "]"}], ",", "\[IndentingNewLine]", 
+               RowBox[{"{", 
+                RowBox[{
+                "\"\<inp\>\"", ",", " ", "\"\<mask\>\"", ",", 
+                 "\"\<Output\>\""}], "}"}]}], "\[IndentingNewLine]", "}"}]}], 
+            ",", "\[IndentingNewLine]", 
+            RowBox[{"TableAlignments", "\[Rule]", "Right"}], ",", " ", 
+            RowBox[{"TableSpacing", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{"2", ",", "1.5"}], "}"}]}]}], "\[IndentingNewLine]", 
+           "]"}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+          RowBox[{"TabView", "[", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"Table", "[", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"FCMView", "[", 
+                  RowBox[{
+                   RowBox[{"Graph", "[", 
+                    RowBox[{"#1", ",", " ", 
+                    RowBox[{"GraphLayout", "->", "\"\<RadialEmbedding\>\""}], 
+                    ",", " ", 
+                    RowBox[{"ImageSize", "\[Rule]", 
+                    RowBox[{"72", "\[Times]", "6"}]}]}], "]"}], ",", " ", 
+                   "#2", ",", " ", "trapvs"}], "]"}], "&"}], ")"}], "@@", 
+               RowBox[{
+               "res", "\[LeftDoubleBracket]", "ev", 
+                "\[RightDoubleBracket]"}]}], ",", "\[IndentingNewLine]", 
+              RowBox[{"{", 
+               RowBox[{"ev", ",", 
+                RowBox[{"Range", "@", 
+                 RowBox[{"Length", "@", "res"}]}]}], "}"}]}], 
+             "\[IndentingNewLine]", "]"}], ",", "1"}], "\[IndentingNewLine]", 
+           "]"}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+          RowBox[{"GraphicsRow", "[", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{"MatrixPlot", "[", 
+               RowBox[{"#", ",", " ", "\[IndentingNewLine]", 
+                RowBox[{"ColorRules", "\[Rule]", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"x_", "/;", 
+                    RowBox[{
+                    "0", "\[LessEqual]", "x", "\[LessEqual]", "0.45"}]}], 
+                    "\[Rule]", "LightBlue"}], ",", 
+                   RowBox[{
+                    RowBox[{"x_", "/;", 
+                    RowBox[{"0.45", "<", "x", "\[LessEqual]", "0.65"}]}], 
+                    "\[Rule]", "Orange"}], ",", 
+                   RowBox[{
+                    RowBox[{"x_", "/;", 
+                    RowBox[{"x", "\[LessEqual]", "0.65"}]}], "\[Rule]", 
+                    "White"}]}], "}"}]}], ",", "\[IndentingNewLine]", 
+                RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"ImageMargins", "\[Rule]", "0"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"FrameTicks", "\[Rule]", 
+                 RowBox[{"{", 
+                  RowBox[{"None", ",", "Automatic"}], "}"}]}], " ", ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"FrameTicksStyle", "\[Rule]", 
+                 RowBox[{"Directive", "[", 
+                  RowBox[{"20", ",", " ", "Bold"}], "]"}]}]}], 
+               "\[IndentingNewLine]", "]"}], "&"}], "/@", 
+             RowBox[{"(", 
+              RowBox[{"Transpose", "/@", "fins"}], ")"}]}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"ImageMargins", "\[Rule]", "0"}]}], "\[IndentingNewLine]",
+            "]"}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", "}"}], 
+        ",", "\"\<|\>\"", ",", "\[IndentingNewLine]", 
+        RowBox[{"ImageSize", "\[Rule]", 
+         RowBox[{"72", "\[Times]", "32"}]}]}], "\[IndentingNewLine]", "]"}]}],
+      ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"inp", ",", "egmask0"}], 
+        RowBox[{"(*", 
+         RowBox[{"ConstantArray", "[", 
+          RowBox[{"0", ",", "n"}], "]"}], "*)"}], 
+        RowBox[{"(*", 
+         RowBox[{"RandomInteger", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "1"}], "}"}], ",", "n"}], "]"}], "*)"}], "}"}], 
+       ",", 
+       RowBox[{"ControlType", "\[Rule]", "None"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"mask", ",", 
+         RowBox[{"(*", 
+          RowBox[{"ConstantArray", "[", 
+           RowBox[{"0", ",", "n"}], "]"}], "*)"}], "egmask0"}], " ", "}"}], 
+       ",", 
+       RowBox[{"ControlType", "\[Rule]", "None"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"Dynamic", "@", 
+      RowBox[{"Panel", "@", 
+       RowBox[{"Grid", "[", 
+        RowBox[{
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"SetterBar", "[", 
+              RowBox[{
+               RowBox[{"Dynamic", "[", 
+                RowBox[{"{", 
+                 RowBox[{"$activationFxn", ",", " ", "$activationBias"}], 
+                 "}"}], "]"}], ",", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"linearActvn", ",", "0"}], "}"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{"logisticActvn", ",", "0"}], "}"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{"UnitStep", ",", "0.5"}], "}"}]}], "}"}]}], "]"}], 
+             ",", " ", 
+             RowBox[{"Text", "[", 
+              RowBox[{"{", 
+               RowBox[{"$activationFxn", ",", " ", "$activationBias"}], "}"}],
+               "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"Outer", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Text", "[", 
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+                  RowBox[{"#", ",", "2"}], "\[RightDoubleBracket]"}], ",", 
+                 " ", "14"}], "]"}], "]"}], "&"}], ",", 
+             RowBox[{"Range", "[", "n", "]"}]}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Outer", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Checkbox", "[", 
+               RowBox[{
+                RowBox[{"Dynamic", "[", 
+                 RowBox[{
+                 "inp", "\[LeftDoubleBracket]", "#", 
+                  "\[RightDoubleBracket]"}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "1"}], "}"}]}], "]"}], "&"}], ",", 
+             RowBox[{"Range", "[", "n", "]"}]}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Outer", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Checkbox", "[", 
+               RowBox[{
+                RowBox[{"Dynamic", "[", 
+                 RowBox[{
+                 "mask", "\[LeftDoubleBracket]", "#", 
+                  "\[RightDoubleBracket]"}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "1", ",", 
+                  RowBox[{"-", "1"}]}], "}"}]}], "]"}], "&"}], ",", 
+             RowBox[{"Range", "[", "n", "]"}]}], "]"}]}], 
+          "\[IndentingNewLine]", "}"}], ",", " ", 
+         RowBox[{"Alignment", "\[Rule]", "Right"}]}], "\[IndentingNewLine]", 
+        "]"}]}]}]}], "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.680353799354656*^9, 3.6803538390116243`*^9}, {
+   3.680353886023369*^9, 3.680354061391148*^9}, {3.6803541033422623`*^9, 
+   3.680354115256837*^9}, {3.680354405217952*^9, 3.680354424312683*^9}, {
+   3.6803544930179253`*^9, 3.68035454595024*^9}, {3.6803545886620207`*^9, 
+   3.680354855020198*^9}, {3.6803549084885283`*^9, 3.680354943554138*^9}, {
+   3.680354991701625*^9, 3.680355035238781*^9}, {3.680355369477846*^9, 
+   3.680355400766548*^9}, {3.680355431723181*^9, 3.680355435243183*^9}, {
+   3.680357932466765*^9, 3.680358026512917*^9}, {3.680358415042335*^9, 
+   3.680358425443225*^9}, {3.6803584972895107`*^9, 3.68035853810816*^9}, {
+   3.68035864802689*^9, 3.680358772666058*^9}, {3.680358869749366*^9, 
+   3.680358874723466*^9}, {3.680359085533429*^9, 3.680359160299983*^9}, {
+   3.6803594449635477`*^9, 3.680359448261745*^9}, {3.680359482347484*^9, 
+   3.680359524249021*^9}, {3.680359733999383*^9, 3.680359753524251*^9}, {
+   3.680359810446033*^9, 3.6803598220265512`*^9}, {3.680359928011627*^9, 
+   3.68035993105042*^9}, {3.680359981206902*^9, 3.680359993558393*^9}, {
+   3.6803600352278767`*^9, 3.680360042185823*^9}, {3.680360995026781*^9, 
+   3.680361040198332*^9}, {3.680361082897553*^9, 3.680361167678412*^9}, {
+   3.680361393824243*^9, 3.680361480067011*^9}, {3.680361517218171*^9, 
+   3.680361522633418*^9}, 3.680362110738042*^9, 3.680362166260625*^9, {
+   3.680362855372303*^9, 3.68036287128752*^9}, {3.6803629120786467`*^9, 
+   3.6803629952211323`*^9}, {3.6803630717809753`*^9, 3.680363262249723*^9}, {
+   3.6803633394195623`*^9, 3.68036335691934*^9}, {3.68036383364964*^9, 
+   3.680363834186707*^9}, {3.680364110357682*^9, 3.6803641867705507`*^9}, {
+   3.680364276640295*^9, 3.6803642815908546`*^9}, 3.680364318078897*^9, {
+   3.680364356313794*^9, 3.6803644522348633`*^9}, {3.6803645897366123`*^9, 
+   3.68036459776715*^9}, {3.6803646280004463`*^9, 3.680364667579917*^9}, {
+   3.6803648178017483`*^9, 3.680364851841131*^9}, {3.680365902837023*^9, 
+   3.680365904151978*^9}, {3.680366216796401*^9, 3.680366275268612*^9}, {
+   3.680374144638644*^9, 3.68037416710706*^9}, {3.680377544899805*^9, 
+   3.680377547586363*^9}, {3.680377620989685*^9, 3.68037762630352*^9}, {
+   3.680377678731124*^9, 3.6803777257122583`*^9}, {3.680377930159586*^9, 
+   3.680377955142065*^9}, {3.680378042629311*^9, 3.6803780541161222`*^9}, {
+   3.6803781058505077`*^9, 3.6803781594638557`*^9}, {3.68037829269245*^9, 
+   3.680378296353757*^9}, {3.680378358032812*^9, 3.680378363675169*^9}, {
+   3.680379895911018*^9, 3.680379901397306*^9}, 3.6803837086192408`*^9, 
+   3.680383831054894*^9, {3.681220241274015*^9, 3.681220280669518*^9}, {
+   3.681220354393914*^9, 3.681220368742687*^9}, {3.681220965396708*^9, 
+   3.6812209700512047`*^9}, {3.681221104787404*^9, 3.681221119417687*^9}, {
+   3.681222142392872*^9, 3.681222161064124*^9}, {3.681222200358676*^9, 
+   3.681222333963644*^9}, {3.681222422082829*^9, 3.681222457209283*^9}, {
+   3.6812224891972427`*^9, 3.681222506788312*^9}, {3.6812226155705137`*^9, 
+   3.681222803772894*^9}, {3.68122323941402*^9, 3.681223264635903*^9}, {
+   3.726878422995123*^9, 3.726878423011366*^9}, {3.726889385389635*^9, 
+   3.7268894453693*^9}, {3.726889727755672*^9, 3.726889733690806*^9}, {
+   3.726890763732823*^9, 3.726890765988793*^9}, {3.726890929368506*^9, 
+   3.726890939994342*^9}, {3.727117193607091*^9, 3.727117193706394*^9}, {
+   3.727117226861808*^9, 3.7271172345807953`*^9}, {3.727702219338385*^9, 
+   3.727702221601975*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"rule", "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"x_", "?", "NumberQ"}], "/;", 
+      RowBox[{"0.5", "<", 
+       RowBox[{"Abs", "[", "x", "]"}], "<", "1.2"}]}], "\[RuleDelayed]", 
+     RowBox[{"{", 
+      RowBox[{"Style", "[", 
+       RowBox[{"x", ",", "Bold", ",", 
+        RowBox[{"Background", "\[Rule]", "LightRed"}]}], "]"}], "}"}]}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"TableForm", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Transpose", "[", 
+      RowBox[{"Chop", "[", 
+       RowBox[{
+        RowBox[{"SetAccuracy", "[", 
+         RowBox[{
+          RowBox[{
+          "fins", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], ",",
+           "2"}], "]"}], ",", 
+        SuperscriptBox["10", 
+         RowBox[{"-", "1"}]]}], "]"}], "]"}], "/.", "rule"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"TableHeadings", "\[Rule]", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"MapThread", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Style", "[", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"#1", "<>", "#2", "<>", "#3"}], ")"}], ",", " ", "14"}], 
+           "]"}], "&"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+            RowBox[{";;", ",", "3"}], "\[RightDoubleBracket]"}], ",", 
+           RowBox[{"ConstantArray", "[", 
+            RowBox[{"\"\<|\>\"", ",", " ", "n"}], "]"}], ",", 
+           RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+            RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}]}], "}"}]}], 
+        "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"\"\<t=\>\"", "<>", 
+           RowBox[{"ToString", "@", "#"}]}], ")"}], "&"}], "/@", 
+        RowBox[{"Range", "[", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"Dimensions", "@", "fins"}], ")"}], "\[LeftDoubleBracket]",
+           "2", "\[RightDoubleBracket]"}], "]"}]}]}], "\[IndentingNewLine]", 
+      "}"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"TableAlignments", "\[Rule]", "Right"}], ",", " ", 
+    RowBox[{"TableSpacing", "\[Rule]", "Automatic"}]}], 
+   RowBox[{"(*", 
+    RowBox[{"{", 
+     RowBox[{"2", ",", "2.5"}], "}"}], "*)"}], "\[IndentingNewLine]", "]"}], 
+  RowBox[{"(*", 
+   RowBox[{"/.", "rule"}], "*)"}]}]}], "Input",
+ CellChangeTimes->{{3.7276967341132727`*^9, 3.7276967347074957`*^9}, {
+  3.727698804280815*^9, 3.7276988774905643`*^9}, {3.727698931801743*^9, 
+  3.7276989509464817`*^9}, {3.727699294713038*^9, 3.727699354529377*^9}, {
+  3.727699533252792*^9, 3.727699572468523*^9}, {3.727699917775682*^9, 
+  3.7276999288511553`*^9}, {3.727699969090741*^9, 3.7277001835342484`*^9}, {
+  3.727700253720748*^9, 3.727700399607183*^9}, {3.727700442455627*^9, 
+  3.727700486336667*^9}, {3.72770058484382*^9, 3.727700590228578*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Transpose", "[", 
+   RowBox[{"fins", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+   "]"}], "//", "annotatedMatrixPlot"}]], "Input",
+ CellChangeTimes->{{3.72769980613973*^9, 3.727699806151341*^9}, {
+   3.727699845074966*^9, 3.727699925175468*^9}, {3.734214364908095*^9, 
+   3.734214375694075*^9}, {3.734214408280443*^9, 3.734214411231084*^9}, 
+   3.734214943738062*^9, {3.734214991645824*^9, 3.734215001485463*^9}, {
+   3.734215257448557*^9, 3.734215279958856*^9}, {3.734215353564039*^9, 
+   3.7342153756990843`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"lbls", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+       "<>", "\"\<|\>\"", "<>", 
+       RowBox[{"#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], 
+      ")"}], "&"}], "/@", 
+    RowBox[{"trapvs", "\[LeftDoubleBracket]", 
+     RowBox[{";;", ",", 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "2"}], "}"}]}], "\[RightDoubleBracket]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ticks", "=", 
+    RowBox[{"{", "\n", "\t\t", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"i", ",", 
+            RowBox[{"Style", "[", 
+             RowBox[{
+              RowBox[{
+              "lbls", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}], 
+              ",", " ", "Bold", ",", " ", "18"}], "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", 
+            RowBox[{"Length", "@", "lbls"}]}], "}"}]}], "]"}], ",", "None"}], 
+       "}"}], ",", "\n", "\t\t", 
+      RowBox[{"{", 
+       RowBox[{"None", ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"i", ",", 
+            RowBox[{"Style", "[", 
+             RowBox[{
+              RowBox[{"\"\<t=\>\"", "<>", 
+               RowBox[{"ToString", "[", "i", "]"}]}], ",", " ", "Bold", ",", 
+              " ", "16"}], "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", "4"}], "}"}]}], "]"}]}], "}"}]}], "\n",
+      "\t\t", "}"}]}], ";"}], "\[IndentingNewLine]"}], "\n", 
+ RowBox[{"MatrixPlot", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Transpose", "@", 
+    RowBox[{"Rationalize", "@", 
+     RowBox[{
+     "fins", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}]}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Epilog", "->", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{"Black", ",", "\[IndentingNewLine]", 
+      RowBox[{"MapIndexed", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Style", "[", 
+          RowBox[{
+           RowBox[{"Text", "[", 
+            RowBox[{
+             RowBox[{"Rationalize", "[", "#1", "]"}], ",", 
+             RowBox[{"Reverse", "[", 
+              RowBox[{"#2", "-", 
+               RowBox[{"1", "/", "2"}]}], "]"}]}], "]"}], ",", " ", "18", ",",
+            "Bold"}], "]"}], "&"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"Reverse", "[", 
+         RowBox[{"Transpose", "[", 
+          RowBox[{
+          "fins", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], 
+          "]"}], "]"}], ",", 
+        RowBox[{"{", "2", "}"}]}], "\[IndentingNewLine]", "]"}]}], "}"}]}], 
+   ",", "\[IndentingNewLine]", 
+   RowBox[{"Mesh", "->", "True"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"FrameTicks", "->", "ticks"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"ImageSize", "\[Rule]", 
+    RowBox[{"72", "\[Times]", "9"}]}]}], "\[IndentingNewLine]", 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.7342150324836597`*^9, 3.734215036470241*^9}, 
+   3.734215227698895*^9, {3.734215580881905*^9, 3.734215606723852*^9}, {
+   3.7342156391246347`*^9, 3.734215675703092*^9}, {3.7342157530591707`*^9, 
+   3.734215771703141*^9}, {3.73421584393497*^9, 3.734215960057179*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"trapmtx", "=", 
+   RowBox[{"MatrixPlot", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"FCMat", "@", "trapFCM"}], ",", " ", "\[IndentingNewLine]", 
+     RowBox[{"ImageSize", "\[Rule]", 
+      RowBox[{"14", "\[Times]", "72"}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{"ImageMargins", "\[Rule]", "0"}], ",", 
+     RowBox[{"Mesh", "\[Rule]", "All"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"Frame", "\[Rule]", "True"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"FrameTicks", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"None", ",", "None"}], "}"}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{"PlotLegends", "\[Rule]", "Automatic"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"PlotLabel", "\[Rule]", 
+      RowBox[{"Style", "[", 
+       RowBox[{
+       "\"\<Intensity Plot:Thucydides Trap Adjacency Matrix\>\"", ",", " ", 
+        "32", ",", " ", "Bold"}], "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<fcm-trap-mtx.png\>\"", ",", "trapmtx", ",", "\"\<PNG\>\""}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.735156622108038*^9, 3.7351566272719927`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"trapmtx2", "=", 
+  RowBox[{"Show", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"annotatedMatrixPlot", "[", 
+     RowBox[{"Round", "[", 
+      RowBox[{
+       RowBox[{"FCMat", "@", "trapFCM"}], ",", " ", "0.1"}], "]"}], "]"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{"ImageSize", "\[Rule]", 
+     RowBox[{"14", "\[Times]", "72"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"PlotLegends", "\[Rule]", "Automatic"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"PlotLabel", "\[Rule]", 
+     RowBox[{"Style", "[", 
+      RowBox[{
+      "\"\<Intensity Plot:Thucydides Trap Adjacency Matrix\>\"", ",", " ", 
+       "32", ",", " ", "Bold"}], "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<fcm-trap-mtx2.PNG\>\"", ",", "trapmtx2", ",", "\"\<PNG\>\""}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.73515594125136*^9, 3.735155954669222*^9}, {
+   3.735156047869073*^9, 3.735156115206173*^9}, {3.7351562449147577`*^9, 
+   3.7351562462513323`*^9}, {3.735156386510854*^9, 3.735156401396728*^9}, {
+   3.735156442974654*^9, 3.7351564629949017`*^9}, {3.735156518039377*^9, 
+   3.735156530167231*^9}, {3.735156570378683*^9, 3.7351565739928007`*^9}, {
+   3.735156639961505*^9, 3.7351566429373827`*^9}, 3.738960385495563*^9, {
+   3.7389604181747103`*^9, 3.7389604205698767`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{RasterBox[CompressedData["
+1:eJxTTMoPSmVmYGAQhGIQGwI+2I/SA0N7X64sjLF8a+/gydz10+elfcuXpO1K
+8+8OuLtGOj0aL4MzHAabewYbzT1nSpbO0of28wKYIx5/eW4ftSzRPsf6NU7x
+gXbvcKUfVomsc394C8qHgYF310inR+NllMZH1//cbLrn/2t7nuWlKsUfH9tz
+iG5zbpA8OODuGul0gkn12x/1V+zdeQ+eSr/0yN6Ps5Jd2O7VgLtrpNMDFS+j
+7ZnBTY/Ws4OTHo2XoUXjiq+REo+42mOj5f/A0oTq/ZGSPocaPRovQ4se6eU/
+rWlc9QsA17yHIw==
+    "], {{0, 0}, {17, 17}}, {0, 1}], {
+    {GrayLevel[
+      NCache[-1 + GoldenRatio, 0.6180339887498949]], 
+     StyleBox[
+      LineBox[{{{0, 17}, {17, 17}}, {{0, 16}, {17, 16}}, {{0, 15}, {17, 
+       15}}, {{0, 14}, {17, 14}}, {{0, 13}, {17, 13}}, {{0, 12}, {17, 12}}, {{
+       0, 11}, {17, 11}}, {{0, 10}, {17, 10}}, {{0, 9}, {17, 9}}, {{0, 8}, {
+       17, 8}}, {{0, 7}, {17, 7}}, {{0, 6}, {17, 6}}, {{0, 5}, {17, 5}}, {{0, 
+       4}, {17, 4}}, {{0, 3}, {17, 3}}, {{0, 2}, {17, 2}}, {{0, 1}, {17, 
+       1}}, {{0, 0}, {17, 0}}}],
+      Antialiasing->False]}, 
+    {GrayLevel[
+      NCache[-1 + GoldenRatio, 0.6180339887498949]], 
+     StyleBox[
+      LineBox[{{{0, 0}, {0, 17}}, {{1, 0}, {1, 17}}, {{2, 0}, {2, 17}}, {{3, 
+       0}, {3, 17}}, {{4, 0}, {4, 17}}, {{5, 0}, {5, 17}}, {{6, 0}, {6, 
+       17}}, {{7, 0}, {7, 17}}, {{8, 0}, {8, 17}}, {{9, 0}, {9, 17}}, {{10, 
+       0}, {10, 17}}, {{11, 0}, {11, 17}}, {{12, 0}, {12, 17}}, {{13, 0}, {13,
+        17}}, {{14, 0}, {14, 17}}, {{15, 0}, {15, 17}}, {{16, 0}, {16, 
+       17}}, {{17, 0}, {17, 17}}}],
+      Antialiasing->False]}}},
+  PlotLegends -> Automatic,
+  Epilog->{
+    GrayLevel[0], {{
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[1, 2]}, {0.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[1, 2]}, {1.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[1, 2]}, {2.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[1, 2]}, {3.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[1, 2]}, {4.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[1, 2]}, {5.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[1, 2]}, {6.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[1, 2]}, {7.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[1, 2]}, {8.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[1, 2]}, {9.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[1, 2]}, {10.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[1, 2]}, {11.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[1, 2]}, {12.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[1, 2]}, {13.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[1, 2]}, {14.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[1, 2]}, {15.5, 0.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.2`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[1, 2]}, {16.5, 0.5}]], 18, Bold, StripOnInput -> False]}, {
+     
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[3, 2]}, {0.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[3, 2]}, {1.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[3, 2]}, {2.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[3, 2]}, {3.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[3, 2]}, {4.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[3, 2]}, {5.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[3, 2]}, {6.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[3, 2]}, {7.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[3, 2]}, {8.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[3, 2]}, {9.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[3, 2]}, {10.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[3, 2]}, {11.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[3, 2]}, {12.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[3, 2]}, {13.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[3, 2]}, {14.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[3, 2]}, {15.5, 1.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.2`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[3, 2]}, {16.5, 1.5}]], 18, Bold, StripOnInput -> False]}, {
+     
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[5, 2]}, {0.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[5, 2]}, {1.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[5, 2]}, {2.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[5, 2]}, {3.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[5, 2]}, {4.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[5, 2]}, {5.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[5, 2]}, {6.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[5, 2]}, {7.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[5, 2]}, {8.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[5, 2]}, {9.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.2`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[5, 2]}, {10.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[5, 2]}, {11.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[5, 2]}, {12.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[5, 2]}, {13.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[5, 2]}, {14.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[5, 2]}, {15.5, 2.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.2`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[5, 2]}, {16.5, 2.5}]], 18, Bold, StripOnInput -> False]}, {
+     
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[7, 2]}, {0.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[7, 2]}, {1.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[7, 2]}, {2.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[7, 2]}, {3.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[7, 2]}, {4.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[7, 2]}, {5.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[7, 2]}, {6.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[7, 2]}, {7.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[7, 2]}, {8.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[7, 2]}, {9.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[7, 2]}, {10.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox[
+         RowBox[{"-", "0.1`"}], TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[7, 2]}, {11.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox[
+         RowBox[{"-", "0.1`"}], TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[7, 2]}, {12.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[7, 2]}, {13.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[7, 2]}, {14.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[7, 2]}, {15.5, 3.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[7, 2]}, {16.5, 3.5}]], 18, Bold, StripOnInput -> False]}, {
+     
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[9, 2]}, {0.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[9, 2]}, {1.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[9, 2]}, {2.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[9, 2]}, {3.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[9, 2]}, {4.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[9, 2]}, {5.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[9, 2]}, {6.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[9, 2]}, {7.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[9, 2]}, {8.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[9, 2]}, {9.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.6000000000000001`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[9, 2]}, {10.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[9, 2]}, {11.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[9, 2]}, {12.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[9, 2]}, {13.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[9, 2]}, {14.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[9, 2]}, {15.5, 4.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[9, 2]}, {16.5, 4.5}]], 18, Bold, StripOnInput -> False]}, {
+     
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[11, 2]}, {0.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[11, 2]}, {1.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[11, 2]}, {2.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[11, 2]}, {3.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[11, 2]}, {4.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[11, 2]}, {5.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[11, 2]}, {6.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[11, 2]}, {7.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[11, 2]}, {8.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[11, 2]}, {9.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.6000000000000001`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[11, 2]}, {10.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[11, 2]}, {11.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[11, 2]}, {12.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[11, 2]}, {13.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[11, 2]}, {14.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[11, 2]}, {15.5, 5.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[11, 2]}, {16.5, 5.5}]], 18, Bold, StripOnInput -> False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[13, 2]}, {0.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[13, 2]}, {1.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[13, 2]}, {2.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[13, 2]}, {3.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[13, 2]}, {4.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[13, 2]}, {5.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[13, 2]}, {6.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[13, 2]}, {7.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[13, 2]}, {8.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[13, 2]}, {9.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[13, 2]}, {10.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[13, 2]}, {11.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[13, 2]}, {12.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[13, 2]}, {13.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[13, 2]}, {14.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[13, 2]}, {15.5, 6.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.30000000000000004`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[13, 2]}, {16.5, 6.5}]], 18, Bold, StripOnInput -> False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[15, 2]}, {0.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[15, 2]}, {1.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[15, 2]}, {2.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[15, 2]}, {3.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[15, 2]}, {4.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[15, 2]}, {5.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[15, 2]}, {6.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[15, 2]}, {7.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[15, 2]}, {8.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[15, 2]}, {9.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[15, 2]}, {10.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[15, 2]}, {11.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[15, 2]}, {12.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[15, 2]}, {13.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[15, 2]}, {14.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[15, 2]}, {15.5, 7.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox[
+         RowBox[{"-", "0.2`"}], TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[15, 2]}, {16.5, 7.5}]], 18, Bold, StripOnInput -> False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[17, 2]}, {0.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[17, 2]}, {1.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[17, 2]}, {2.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[17, 2]}, {3.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[17, 2]}, {4.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[17, 2]}, {5.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[17, 2]}, {6.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[17, 2]}, {7.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[17, 2]}, {8.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[17, 2]}, {9.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[17, 2]}, {10.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[17, 2]}, {11.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[17, 2]}, {12.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[17, 2]}, {13.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[17, 2]}, {14.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[17, 2]}, {15.5, 8.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox[
+         RowBox[{"-", "0.2`"}], TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[17, 2]}, {16.5, 8.5}]], 18, Bold, StripOnInput -> False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[19, 2]}, {0.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[19, 2]}, {1.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[19, 2]}, {2.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[19, 2]}, {3.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox[
+         RowBox[{"-", "0.1`"}], TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[19, 2]}, {4.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[19, 2]}, {5.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[19, 2]}, {6.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[19, 2]}, {7.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[19, 2]}, {8.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[19, 2]}, {9.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[19, 2]}, {10.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[19, 2]}, {11.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[19, 2]}, {12.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[19, 2]}, {13.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[19, 2]}, {14.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[19, 2]}, {15.5, 9.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[19, 2]}, {16.5, 9.5}]], 18, Bold, StripOnInput -> False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[21, 2]}, {0.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[21, 2]}, {1.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[21, 2]}, {2.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[21, 2]}, {3.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.6000000000000001`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[21, 2]}, {4.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[21, 2]}, {5.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[21, 2]}, {6.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[21, 2]}, {7.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[21, 2]}, {8.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[21, 2]}, {9.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[21, 2]}, {10.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[21, 2]}, {11.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[21, 2]}, {12.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[21, 2]}, {13.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[21, 2]}, {14.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[21, 2]}, {15.5, 10.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[21, 2]}, {16.5, 10.5}]], 18, Bold, StripOnInput -> 
+       False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[23, 2]}, {0.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[23, 2]}, {1.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[23, 2]}, {2.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[23, 2]}, {3.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.6000000000000001`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[23, 2]}, {4.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[23, 2]}, {5.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[23, 2]}, {6.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[23, 2]}, {7.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[23, 2]}, {8.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[23, 2]}, {9.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[23, 2]}, {10.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[23, 2]}, {11.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[23, 2]}, {12.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[23, 2]}, {13.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[23, 2]}, {14.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[23, 2]}, {15.5, 11.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[23, 2]}, {16.5, 11.5}]], 18, Bold, StripOnInput -> 
+       False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[25, 2]}, {0.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[25, 2]}, {1.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[25, 2]}, {2.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[25, 2]}, {3.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[25, 2]}, {4.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.6000000000000001`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[25, 2]}, {5.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.6000000000000001`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[25, 2]}, {6.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[25, 2]}, {7.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[25, 2]}, {8.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[25, 2]}, {9.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[25, 2]}, {10.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[25, 2]}, {11.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[25, 2]}, {12.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[25, 2]}, {13.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[25, 2]}, {14.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[25, 2]}, {15.5, 12.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.30000000000000004`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[25, 2]}, {16.5, 12.5}]], 18, Bold, StripOnInput -> 
+       False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox[
+         RowBox[{"-", "0.1`"}], TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[27, 2]}, {0.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[27, 2]}, {1.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[27, 2]}, {2.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[27, 2]}, {3.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[27, 2]}, {4.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[27, 2]}, {5.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[27, 2]}, {6.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[27, 2]}, {7.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[27, 2]}, {8.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[27, 2]}, {9.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[27, 2]}, {10.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[27, 2]}, {11.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[27, 2]}, {12.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[27, 2]}, {13.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[27, 2]}, {14.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[27, 2]}, {15.5, 13.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox[
+         RowBox[{"-", "0.2`"}], TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[27, 2]}, {16.5, 13.5}]], 18, Bold, StripOnInput -> 
+       False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox["0.6000000000000001`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[29, 2]}, {0.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[29, 2]}, {1.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[29, 2]}, {2.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[29, 2]}, {3.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[29, 2]}, {4.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[29, 2]}, {5.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[29, 2]}, {6.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[29, 2]}, {7.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[29, 2]}, {8.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[29, 2]}, {9.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[29, 2]}, {10.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[29, 2]}, {11.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[29, 2]}, {12.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[29, 2]}, {13.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[29, 2]}, {14.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[29, 2]}, {15.5, 14.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[29, 2]}, {16.5, 14.5}]], 18, Bold, StripOnInput -> 
+       False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox["0.6000000000000001`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[31, 2]}, {0.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[31, 2]}, {1.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[31, 2]}, {2.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[31, 2]}, {3.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[31, 2]}, {4.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[31, 2]}, {5.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[31, 2]}, {6.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[31, 2]}, {7.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[31, 2]}, {8.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[31, 2]}, {9.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[31, 2]}, {10.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[31, 2]}, {11.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[31, 2]}, {12.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[31, 2]}, {13.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[31, 2]}, {14.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[31, 2]}, {15.5, 15.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[31, 2]}, {16.5, 15.5}]], 18, Bold, StripOnInput -> 
+       False]}, {
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[1, 2], 
+          Rational[33, 2]}, {0.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.6000000000000001`", TraditionalForm], 
+        NCache[{
+          Rational[3, 2], 
+          Rational[33, 2]}, {1.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.6000000000000001`", TraditionalForm], 
+        NCache[{
+          Rational[5, 2], 
+          Rational[33, 2]}, {2.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[7, 2], 
+          Rational[33, 2]}, {3.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[9, 2], 
+          Rational[33, 2]}, {4.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[11, 2], 
+          Rational[33, 2]}, {5.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[13, 2], 
+          Rational[33, 2]}, {6.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[15, 2], 
+          Rational[33, 2]}, {7.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[17, 2], 
+          Rational[33, 2]}, {8.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[19, 2], 
+          Rational[33, 2]}, {9.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[21, 2], 
+          Rational[33, 2]}, {10.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[23, 2], 
+          Rational[33, 2]}, {11.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[25, 2], 
+          Rational[33, 2]}, {12.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[27, 2], 
+          Rational[33, 2]}, {13.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[29, 2], 
+          Rational[33, 2]}, {14.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.`", TraditionalForm], 
+        NCache[{
+          Rational[31, 2], 
+          Rational[33, 2]}, {15.5, 16.5}]], 18, Bold, StripOnInput -> False], 
+      
+      StyleBox[
+       InsetBox[
+        FormBox["0.30000000000000004`", TraditionalForm], 
+        NCache[{
+          Rational[33, 2], 
+          Rational[33, 2]}, {16.5, 16.5}]], 18, Bold, StripOnInput -> 
+       False]}}},
+  Frame->True,
+  FrameLabel->{None, None},
+  FrameTicks->{{{{16.5, 
+       FormBox["\"C1\"", TraditionalForm]}, {15.5, 
+       FormBox["\"C2\"", TraditionalForm]}, {14.5, 
+       FormBox["\"C3\"", TraditionalForm]}, {13.5, 
+       FormBox["\"C4\"", TraditionalForm]}, {12.5, 
+       FormBox["\"C5\"", TraditionalForm]}, {11.5, 
+       FormBox["\"C6\"", TraditionalForm]}, {10.5, 
+       FormBox["\"C7\"", TraditionalForm]}, {9.5, 
+       FormBox["\"C8\"", TraditionalForm]}, {8.5, 
+       FormBox["\"C9\"", TraditionalForm]}, {7.5, 
+       FormBox["\"C10\"", TraditionalForm]}, {6.5, 
+       FormBox["\"C11\"", TraditionalForm]}, {5.5, 
+       FormBox["\"C12\"", TraditionalForm]}, {4.5, 
+       FormBox["\"C13\"", TraditionalForm]}, {3.5, 
+       FormBox["\"C14\"", TraditionalForm]}, {2.5, 
+       FormBox["\"C15\"", TraditionalForm]}, {1.5, 
+       FormBox["\"C16\"", TraditionalForm]}, {0.5, 
+       FormBox["\"C17\"", TraditionalForm]}}, None}, {None, {{0.5, 
+       FormBox["\"C1\"", TraditionalForm]}, {1.5, 
+       FormBox["\"C2\"", TraditionalForm]}, {2.5, 
+       FormBox["\"C3\"", TraditionalForm]}, {3.5, 
+       FormBox["\"C4\"", TraditionalForm]}, {4.5, 
+       FormBox["\"C5\"", TraditionalForm]}, {5.5, 
+       FormBox["\"C6\"", TraditionalForm]}, {6.5, 
+       FormBox["\"C7\"", TraditionalForm]}, {7.5, 
+       FormBox["\"C8\"", TraditionalForm]}, {8.5, 
+       FormBox["\"C9\"", TraditionalForm]}, {9.5, 
+       FormBox["\"C10\"", TraditionalForm]}, {10.5, 
+       FormBox["\"C11\"", TraditionalForm]}, {11.5, 
+       FormBox["\"C12\"", TraditionalForm]}, {12.5, 
+       FormBox["\"C13\"", TraditionalForm]}, {13.5, 
+       FormBox["\"C14\"", TraditionalForm]}, {14.5, 
+       FormBox["\"C15\"", TraditionalForm]}, {15.5, 
+       FormBox["\"C16\"", TraditionalForm]}, {16.5, 
+       FormBox["\"C17\"", TraditionalForm]}}}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImageSize->1008,
+  Method->{
+   "AxisPadding" -> Scaled[0.02], "DefaultBoundaryStyle" -> Automatic, 
+    "DefaultPlotStyle" -> Automatic, "DomainPadding" -> Scaled[0.02], 
+    "RangePadding" -> Scaled[0.05]},
+  PlotLabel->FormBox[
+    StyleBox[
+    "\"Intensity Plot:Thucydides Trap Adjacency Matrix\"", 32, Bold, 
+     StripOnInput -> False], TraditionalForm]]], "Output",
+ CellChangeTimes->{3.738960379525207*^9, 3.7389604212845993`*^9}],
+
+Cell[BoxData["\<\"fcm-trap-mtx2.PNG\"\>"], "Output",
+ CellChangeTimes->{3.738960379525207*^9, 3.738960421978002*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Directory", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.735156540808484*^9, 3.735156543136717*^9}}],
+
+Cell[BoxData["\<\"/Users/oosoba/Documents/RAND/Coding/fcm-fusion/socsim\"\>"],\
+ "Output",
+ CellChangeTimes->{3.738960403047552*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{Full, Full},
+WindowMargins->{{34, Automatic}, {Automatic, 81}},
+CellContext->Notebook,
+Magnification:>1.25 Inherited,
+FrontEndVersion->"10.4 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 11, \
+2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 229, 4, 54, "Subsection",
+ InitializationGroup->True],
+Cell[CellGroupData[{
+Cell[834, 30, 942, 18, 22, "Input"],
+Cell[1779, 50, 132, 2, 70, "Output"],
+Cell[1914, 54, 117, 1, 70, "Output"],
+Cell[2034, 57, 73, 1, 70, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2156, 64, 186, 3, 43, "Subsection",
+ InitializationGroup->True],
+Cell[CellGroupData[{
+Cell[2367, 71, 134, 2, 43, "Subsubsection",
+ InitializationGroup->True],
+Cell[CellGroupData[{
+Cell[2526, 77, 2564, 74, 351, "Input",
+ InitializationGroup->True],
+Cell[5093, 153, 140, 3, 70, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5270, 161, 1990, 49, 267, "Input",
+ InitializationGroup->True],
+Cell[7263, 212, 71, 1, 70, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7371, 218, 6503, 155, 750, "Input",
+ InitializationGroup->True],
+Cell[13877, 375, 31533, 661, 70, "Output"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[45471, 1043, 225, 3, 54, "Subsection"],
+Cell[CellGroupData[{
+Cell[45721, 1050, 161, 2, 43, "Subsubsection"],
+Cell[45885, 1054, 985, 23, 162, "Input"]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[46919, 1083, 202, 3, 54, "Subsection"],
+Cell[CellGroupData[{
+Cell[47146, 1090, 3631, 78, 519, "Input"],
+Cell[50780, 1170, 17828, 353, 1325, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[68657, 1529, 116, 1, 80, "Section"],
+Cell[CellGroupData[{
+Cell[68798, 1534, 234, 3, 43, "Subsubsection"],
+Cell[69035, 1539, 763, 21, 99, "Input"],
+Cell[69801, 1562, 3297, 77, 309, "Input"],
+Cell[73101, 1641, 8435, 192, 1086, "Input"],
+Cell[81539, 1835, 2723, 66, 120, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[84299, 1906, 204, 3, 43, "Subsubsection"],
+Cell[84506, 1911, 14672, 317, 1233, "Input"],
+Cell[99181, 2230, 2975, 73, 263, "Input"],
+Cell[102159, 2305, 564, 10, 36, "Input"],
+Cell[102726, 2317, 3399, 87, 393, "Input"],
+Cell[106128, 2406, 1181, 25, 225, "Input"],
+Cell[CellGroupData[{
+Cell[107334, 2435, 1364, 28, 162, "Input"],
+Cell[108701, 2465, 61691, 1875, 1315, "Output"],
+Cell[170395, 4342, 116, 1, 36, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[170548, 4348, 123, 2, 36, "Input"],
+Cell[170674, 4352, 132, 2, 36, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

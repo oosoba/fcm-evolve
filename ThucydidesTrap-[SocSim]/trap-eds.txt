@@ -1,0 +1,128 @@
+## Dynamic version (Apr2017):
+
+addjitter = 0.075;
+strongOrLink = $activationThreshold/2 ;
+orLink = strongOrLink(*-0.05*);
+weakOrLink = $activationThreshold/4;
+unsure = orLink;
+andLink = $activationThreshold/3;
+subAndLink = $activationThreshold + 2*addjitter;
+
+
+trapspec = {
+   {2, 1, subAndLink}, {3, 1, subAndLink},
+   {1, 2, subAndLink}, {1, 3, subAndLink},
+   {4, 1, -weakOrLink},(*FEAR edges*)
+   
+   {5, 6, subAndLink}, {6, 5, subAndLink},
+   {5, 7, subAndLink}, {7, 5, subAndLink},
+   {8, 5, -weakOrLink},(*Honor edges*)
+   
+   {14, 12, -weakOrLink}, {14, 13, -weakOrLink},
+   {12, 11, subAndLink}, {13, 11, subAndLink},
+   {15, 11, weakOrLink + addjitter},(*Interests edges*)
+   
+   {17, 17, orLink},(*WAR self-excitations for temporal correlation/
+   momentum of war*)
+   {1, 17, 1/3}, {5, 17, 1/3}, {11, 17, 
+    1/3},(*TLD'and' links*)
+   
+   {4, 17, -andLink - addjitter}, {9, 17, -andLink - addjitter}, {10, 
+    17, -andLink}, {15, 17, andLink}, (*Aux TLD'and' links*)
+   {16, 
+    17, andLink} ,(*Shi link...*)
+   
+   (* Dynamic Feedback Links *)
+   {10, 5, -weakOrLink},
+   {9, 1, weakOrLink},
+   {4, 11, -weakOrLink},
+   {8, 11, -weakOrLink},
+   {5, 11, weakOrLink + addjitter},
+   
+   (* Dynamic Feedback Links pt 2, Huntington*)
+   {4, 14, weakOrLink},
+   {10, 14, weakOrLink},
+   {14, 10, weakOrLink}
+   };
+
+### Scenario Description:
+   - US maintains a strong defensive posture
+   - China is economically dominant
+   - US public resentment is high
+   - Both sides are economically dependent
+   - Nukes are available to both sides
+   - Diplomatic channels are open
+
+
+## Updated version (Feb2017):
+
+addjitter = 0.075;
+strongOrLink = $activationThreshold/2 ;
+orLink = strongOrLink(*-0.05*);
+weakOrLink = $activationThreshold/4;
+unsure = orLink;
+andLink = $activationThreshold/3;
+subAndLink = $activationThreshold + 2*addjitter;
+
+trapspec = {
+   {2, 1, subAndLink}, {3, 1, subAndLink},
+   {1, 2, subAndLink}, {1, 3, subAndLink},
+   {4, 1, -weakOrLink},(*FEAR edges*)
+   
+   {5, 6, subAndLink}, {6, 5, subAndLink},
+   {5, 7, subAndLink}, {7, 5, subAndLink},
+   {8, 5, -weakOrLink},(*Honor edges*)
+   
+   {14, 12, -weakOrLink}, {14, 13, -weakOrLink},
+   {12, 11, subAndLink}, {13, 11, subAndLink},
+   {15, 11, weakOrLink + addjitter},(*Interests edges*)
+   
+   {17, 17, orLink},(*WAR self-excitations for temporal correlation/
+   momentum of war*)
+   {1, 17, 1/3}, {5, 17, 1/3}, {11, 17, 
+    1/3},(*TLD'and' links*)
+   
+   {4, 17, -andLink - addjitter}, {9, 17, -andLink - addjitter}, {10, 
+    17, -andLink}, {15, 17, andLink}, (*Aux TLD'and' links*)
+   {16, 
+    17, andLink} (*Shi link...?*)
+   };
+
+
+### Scenario Description:
+- US maintains a strong defensive posture
+- China is economically dominant
+- US public resentment is high
+- Both sides are economically dependent
+- Nukes are available to both sides
+- Diplomatic channels are open
+
+
+
+## Initial Version (Dec2017):
+
+strongOrLink = $activationThreshold/2;
+orLink = strongOrLink - 0.05;
+weakOrLink = $activationThreshold/4;
+unsure = orLink;
+andLink = $activationThreshold/3;
+addjitter = 0.05;
+
+
+trapegs = {
+   {2, 1, strongOrLink}, {3, 1, strongOrLink}, {4, 1, -weakOrLink},
+   {1, 2, strongOrLink}, {1, 3, strongOrLink}, (* FEAR edges *)
+
+   {5, 6, orLink}, {6, 5, orLink},
+   {5, 7, orLink}, {7, 5, orLink},
+   {8, 5, -weakOrLink}, (* Honor edges *)
+
+   {12, 11, orLink}, {13, 11, orLink},
+   {14, 12, -weakOrLink}, {14, 13, -weakOrLink},
+   {15, 11, weakOrLink}, (* Interests edges *)
+
+   {17, 17, orLink}, (* WAR self-excitations for temporal correlation/momentum of war *)
+   {1, 17, andLink}, {5, 17, andLink}, {11, 17, andLink}, (* TLD 'and' links*)
+   {4, 17, -andLink-addjitter}, {9, 17, -andLink-addjitter}, {10, 17, -andLink}, {15, 17, 0.75*weakOrLink} (* Aux TLD 'and' links*)
+   {16, 17, andLink} (* Shi link...?*)
+};

@@ -1,0 +1,39 @@
+strongOrLink = $activationThreshold/2; 
+orLink = strongOrLink - 0.05; 
+weakOrLink = $activationThreshold/4;
+unsure = orLink;
+andLink = $activationThreshold/4;
+
+
+psotegs = {
+   (* Original Tree structure *)
+   {1, 6, strongOrLink}, {2, 6, strongOrLink}, {3, 6, strongOrLink}, {4, 6, orLink}, {5, 6, orLink}, {30, 6, weakOrLink}, {31, 6, weakOrLink}, {32, 6, weakOrLink},
+   
+   {7, 10, strongOrLink}, {8, 10, weakOrLink}, {9, 10, orLink}, {24, 10, strongOrLink},
+   
+   {10, 13, strongOrLink}, {11, 13, strongOrLink}, {12, 13, weakOrLink},
+   
+   {14, 18, strongOrLink (*unsure*)}, {15, 18, weakOrLink}, {16, 18, orLink}, {17, 18, orLink},
+   
+   {19, 23, strongOrLink (*unsure*)}, {20, 23, strongOrLink (*unsure*)}, {21, 23, -strongOrLink}, {22, 23, -strongOrLink},
+   
+   
+   (* Loose bits in orig factor tree *)
+   {25, 11, orLink + 0.1}, (* fudge low fan-in nodes else never triggers *)
+   {24, 7, strongOrLink + 0.3 }, {24, 11, strongOrLink},
+   {23, 19, strongOrLink (*unsure*)}, {23, 20, strongOrLink (*unsure*)}, {18, 14, strongOrLink (*unsure*)}, (* return links for uncertain causation *)
+   
+   
+   {6, 50, andLink}, {13, 50, andLink}, {18, 50, andLink}, {23, 50, andLink}, (*TLD 'and' links*)
+   {50, 50, 0.1}, (* weak PSOT self-excitations for temporal correlation(?) *)
+   
+   
+   (* see pg 23 in PD+AOM2013 for next set of xlinks *)
+   {29, 13, orLink}, {29, 21, -(orLink + 0.4)},(* succ links: Effects of successes *)
+   {6, 29, weakOrLink}, (* eff \[Rule] success *)
+   {33, 13, -orLink}, {33, 21, (orLink + 0.4)},(* fail links: Effects of failures *)
+   {26, 6, -strongOrLink}, {26, 13, -strongOrLink},(* Effects of Misbehaving grps {26,18,-orLink}, *)
+   
+   {6, 13, weakOrLink}, {13, 18, weakOrLink}, {18, 23, weakOrLink}(*rem l\[Rule]r dep weak links*)
+
+}; (* ,{29,18, orLink} *)

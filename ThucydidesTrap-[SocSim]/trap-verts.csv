@@ -1,0 +1,17 @@
+1,FEAR,Fear
+2,usd,US Military/Defense Posture
+3,chnd,China Military/Defense Posture
+4,geod,Geographical Distance
+5,ENT,Sense of Entitlement/Honor
+6,uspub,US Public Resentment
+7,chnpub,Chinese Public Resentment
+8,dipl,Diplomacy Channels & International Rules
+9,NUKE,Nuclear Power/MAD
+10,ShrdCult,Shared Culture
+11,INT,National Interests Clash
+12,usecon,US Economic Dominance
+13,chnecon,China Economic Dominance
+14,econdep,Economic Interdependence
+15,allyTangle,Alliance Network Structural Friction
+16,shi,Contextual/Historical Military Momentum
+17,WAR*, War

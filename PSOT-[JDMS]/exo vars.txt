@@ -1,0 +1,3 @@
+Exogenous Variables:
+=====================
+- 30, succf, Success/Failure

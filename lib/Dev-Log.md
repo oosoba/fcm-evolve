@@ -1,7 +1,7 @@
 # FCM Lib: Implementation Details
 
 ## Version 0.2 Planning
-- Plot out the limit cycles
+- [ ] Plot out the limit cycles
 - [x] Inverse search/Backward Chaining: Given either an output state or limit cycle. Find some or all of the input states (unforced) that lead to those.  Special case of running all possible inputs and listing all output limit cycles and fixed points.
     - see socsim model for exhaustive search solution to this
 

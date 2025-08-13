@@ -255,6 +255,59 @@ class FCM(nx.MultiDiGraph):
 
         return FCM.join(filtered_fcms, weights, title)
 
+    @staticmethod
+    def create_initial_vector(fcm, active_nodes):
+        """
+        Creates an initial activation vector with specified nodes active.
+
+        Args:
+            fcm (FCM): The FCM object.
+            active_nodes (list): A list of node names to activate.
+
+        Returns:
+            np.array: The initial activation vector.
+        """
+        node_order = list(fcm.nodes())
+        initial_vector = np.zeros(len(node_order))
+        for node in active_nodes:
+            if node in node_order:
+                idx = node_order.index(node)
+                initial_vector[idx] = 1
+        return initial_vector
+
+    def visualize_evolution(self, history, output_dir="evolution_steps"):
+        """
+        Generates a series of images visualizing the FCM's evolution.
+
+        Args:
+            history (numpy.matrix): The output from evolve_to_limit.
+            output_dir (str, optional): The directory to save the image files.
+                Defaults to "evolution_steps".
+        """
+        import os
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        node_order = list(self.nodes())
+
+        for i, state in enumerate(np.asarray(history)):
+            plt.figure(figsize=(10, 10))
+
+            # Create a color map based on activation levels
+            colors = []
+            for node in node_order:
+                node_index = node_order.index(node)
+                activation = state[node_index]
+                # Green for active, red for inactive, with intensity
+                colors.append((1 - activation, activation, 0))
+
+            self.draw(node_color=colors)
+            plt.title(f"{self.title} - Step {i}")
+
+            filename = os.path.join(output_dir, f"step_{i:03d}.png")
+            plt.savefig(filename)
+            plt.close()
+
     def learn(self, data, rule='dhl', learning_rate=0.1):
         """
         Updates the FCM's edge weights based on time-series data using a Hebbian learning rule.

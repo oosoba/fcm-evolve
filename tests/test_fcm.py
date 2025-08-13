@@ -69,25 +69,33 @@ class TestFCM(unittest.TestCase):
 
     def test_evolve_asynchronous(self):
         """
-        Test the asynchronous evolution method.
+        Test the asynchronous evolution method with a deterministic setup.
         """
-        initial_vector_map = {
-            "HCP": 1, "stas": 0, "inju": 1, "HCF": 0, "ADP": 0, "PAgg": 0,
-            "clop": 0, "A2": 1, "war": 1, "K": 1, "cox": 0, "aspi": 0
-        }
+        # Create a simple 2-node FCM where A activates B
+        fcm_simple = FCM()
+        fcm_simple.add_weighted_edges_from([('A', 'B', 1.0)])
 
-        node_order = list(self.fcm.nodes())
-        initial_vector = np.array([initial_vector_map.get(node, 0) for node in node_order])
+        # Initial state: A is active, B is not
+        initial_vector = np.array([1, 0])
         mask = np.zeros_like(initial_vector)
 
-        # Evolve with a subset size of 1
-        result_vector = self.fcm.evolve_asynchronous(initial_vector, mask, subset_size=1)
+        # Since 'A' is the only unmasked node that can be updated,
+        # and it has no inputs, it will be chosen. But its state won't change.
+        # Let's activate B instead, which is guaranteed to change.
+        # To do this, we need to know the update order.
+        # A better test: A->B, B->A. A=1, B=0. Update B. B becomes 1.
+        fcm_simple_2 = FCM()
+        fcm_simple_2.add_weighted_edges_from([('A', 'B', 1.0), ('B', 'A', 1.0)])
+        initial_vector_2 = np.array([1, 0])
+        mask_2 = np.array([1, 0]) # Clamp A, so only B can be updated
 
-        # Check that the output has the correct shape
-        self.assertEqual(result_vector.shape, (12,))
+        # Evolve with a subset size of 1. Only B can be chosen.
+        result_vector = fcm_simple_2.evolve_asynchronous(initial_vector_2, mask_2, subset_size=1)
 
-        # Check that the number of changed nodes is at most the subset size
-        self.assertTrue(np.sum(result_vector != initial_vector) <= 1)
+        # Expected output: A is still 1 (clamped), B becomes 1
+        expected_output = np.array([1, 1])
+
+        np.testing.assert_array_equal(result_vector, expected_output)
 
     def test_knowledge_fusion(self):
         """
@@ -114,6 +122,20 @@ class TestFCM(unittest.TestCase):
         # Edge (B, C) should be vetoed because it's only in 1 of 3 FCMs
         self.assertFalse(voted_fcm.has_edge('B', 'C'))
 
+    def test_create_initial_vector(self):
+        """
+        Test the create_initial_vector static method.
+        """
+        active_nodes = ["HCP", "inju"]
+        initial_vector = FCM.create_initial_vector(self.fcm, active_nodes)
+
+        node_order = list(self.fcm.nodes())
+        for i, node in enumerate(node_order):
+            if node in active_nodes:
+                self.assertEqual(initial_vector[i], 1)
+            else:
+                self.assertEqual(initial_vector[i], 0)
+
     def test_hebbian_learning(self):
         """
         Test the Hebbian learning method.
@@ -132,6 +154,30 @@ class TestFCM(unittest.TestCase):
 
         # The weight should increase because of the correlation
         self.assertTrue(fcm.get_edge_data('A', 'B')[0]['weight'] > 0.5)
+
+    def test_visualize_evolution(self):
+        """
+        Test the evolution visualization method.
+        """
+        import os
+        output_dir = "output"
+
+        # Evolve the clot FCM from a known state
+        initial_vector = np.zeros(len(self.fcm.nodes()))
+        mask = np.zeros_like(initial_vector)
+        history = self.fcm.evolve_to_limit(initial_vector, mask)
+
+        # Generate the visualization
+        self.fcm.visualize_evolution(history, output_dir=output_dir)
+
+        # Check that the image files were created
+        self.assertTrue(os.path.exists(output_dir))
+        self.assertTrue(len(os.listdir(output_dir)) > 0)
+
+        # Clean up the created files
+        for f in os.listdir(output_dir):
+            os.remove(os.path.join(output_dir, f))
+        os.rmdir(output_dir)
 
 
 if __name__ == '__main__':

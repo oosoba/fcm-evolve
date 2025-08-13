@@ -129,6 +129,42 @@ class FCM(nx.MultiDiGraph):
 
         return np.matrix(history)
 
+    def evolve_asynchronous(self, activation_vector, mask, subset_size=1):
+        """
+        Performs a single asynchronous evolution step on a subset of nodes.
+
+        Args:
+            activation_vector (np.array): The current activation state.
+            mask (np.array): A vector to clamp node values.
+            subset_size (int): The number of nodes to update asynchronously.
+
+        Returns:
+            np.array: The new activation state.
+        """
+        new_vector = activation_vector.copy()
+
+        # Get indices of nodes that are not masked off
+        unmasked_indices = np.where(mask == 0)[0]
+
+        if len(unmasked_indices) == 0:
+            return new_vector
+
+        # Choose a random subset of unmasked nodes to update
+        update_indices = np.random.choice(
+            unmasked_indices,
+            size=min(subset_size, len(unmasked_indices)),
+            replace=False
+        )
+
+        # Calculate the full potential next state
+        full_next_vector = self.evolve_once(activation_vector, mask)
+
+        # Only update the selected nodes
+        for i in update_indices:
+            new_vector[i] = full_next_vector[i]
+
+        return new_vector
+
     def analyze(self):
         """
         Computes several network centrality metrics for the FCM.
@@ -145,3 +181,127 @@ class FCM(nx.MultiDiGraph):
             # "eigenvector_centrality": nx.eigenvector_centrality(self, weight='weight')
         }
         return analysis
+
+    @staticmethod
+    def join(fcms, weights=None, title="Joined FCM"):
+        """
+        Combines a list of FCMs using weighted addition.
+
+        Args:
+            fcms (list): A list of FCM objects to join.
+            weights (list, optional): A list of weights for each FCM.
+                If None, FCMs are weighted equally. Defaults to None.
+            title (str, optional): The title for the new joined FCM.
+
+        Returns:
+            FCM: A new FCM object representing the joined map.
+        """
+        if weights is None:
+            weights = [1 / len(fcms)] * len(fcms)
+        else:
+            weights = np.array(weights) / np.sum(weights)
+
+        all_nodes = set()
+        for fcm in fcms:
+            all_nodes.update(fcm.nodes())
+
+        new_fcm = FCM(title=title)
+        new_fcm.add_nodes_from(sorted(list(all_nodes)))
+
+        edge_weights = {}
+        for fcm, fcm_weight in zip(fcms, weights):
+            for u, v, data in fcm.edges(data=True):
+                weight = data.get('weight', 0)
+                if (u, v) not in edge_weights:
+                    edge_weights[(u, v)] = 0
+                edge_weights[(u, v)] += fcm_weight * weight
+
+        for (u, v), weight in edge_weights.items():
+            if weight != 0:
+                new_fcm.add_edge(u, v, weight=weight)
+
+        return new_fcm
+
+    @staticmethod
+    def join_by_vote(fcms, weights=None, title="Voted Joined FCM"):
+        """
+        Combines a list of FCMs using majority vote before weighted addition.
+        An edge is only included if it exists in at least half of the FCMs.
+
+        Args:
+            fcms (list): A list of FCM objects to join.
+            weights (list, optional): A list of weights for each FCM.
+            title (str, optional): The title for the new joined FCM.
+
+        Returns:
+            FCM: A new FCM object representing the joined map.
+        """
+        n = len(fcms)
+        edge_votes = {}
+        for fcm in fcms:
+            for u, v in fcm.edges():
+                if (u, v) not in edge_votes:
+                    edge_votes[(u, v)] = 0
+                edge_votes[(u, v)] += 1
+
+        vetoed_edges = {edge for edge, count in edge_votes.items() if count < n / 2}
+
+        # Create copies of FCMs and remove vetoed edges
+        filtered_fcms = []
+        for fcm in fcms:
+            fcm_copy = fcm.copy()
+            fcm_copy.remove_edges_from(vetoed_edges)
+            filtered_fcms.append(fcm_copy)
+
+        return FCM.join(filtered_fcms, weights, title)
+
+    def learn(self, data, rule='dhl', learning_rate=0.1):
+        """
+        Updates the FCM's edge weights based on time-series data using a Hebbian learning rule.
+
+        Args:
+            data (np.array): A 2D array where rows are nodes and columns are time steps.
+            rule (str, optional): The learning rule to use ('dhl', 'hebbian', 'ghl').
+                Defaults to 'dhl'.
+            learning_rate (float, optional): The learning rate for the update rule.
+                Defaults to 0.1.
+        """
+        if not self.nodes():
+            raise ValueError("FCM must have nodes before learning.")
+
+        node_order = list(self.nodes())
+        if data.shape[0] != len(node_order):
+            raise ValueError("Data shape must match the number of nodes.")
+
+        # Create a mapping from node name to its index in the data array
+        name_to_index = {name: i for i, name in enumerate(node_order)}
+
+        delta_data = np.diff(data, axis=1)
+
+        for u, v, d in self.edges(data=True):
+            idx_u = name_to_index[u]
+            idx_v = name_to_index[v]
+
+            C0 = data[idx_u, :]
+            C1 = data[idx_v, :]
+
+            delta_C0 = np.concatenate(([0], delta_data[idx_u, :]))
+            delta_C1 = np.concatenate(([0], delta_data[idx_v, :]))
+
+            weight = d.get('weight', 0)
+
+            for t in range(data.shape[1]):
+                if rule == 'dhl':
+                    update = learning_rate * (delta_C0[t] * delta_C1[t] - weight)
+                elif rule == 'hebbian':
+                    update = learning_rate * (C0[t] * C1[t] - weight)
+                elif rule == 'ghl':
+                    dhl_update = learning_rate * (delta_C0[t] * delta_C1[t] - weight)
+                    hebbian_update = learning_rate * (C0[t] * C1[t] - weight)
+                    update = dhl_update + hebbian_update
+                else:
+                    raise ValueError(f"Unknown learning rule: {rule}")
+
+                weight += update
+
+            d['weight'] = weight

@@ -67,6 +67,72 @@ class TestFCM(unittest.TestCase):
         # The in_degree is a DegreeView object, which acts like a dict
         self.assertAlmostEqual(analysis_results["in_degree"]["PAgg"], 3.65)
 
+    def test_evolve_asynchronous(self):
+        """
+        Test the asynchronous evolution method.
+        """
+        initial_vector_map = {
+            "HCP": 1, "stas": 0, "inju": 1, "HCF": 0, "ADP": 0, "PAgg": 0,
+            "clop": 0, "A2": 1, "war": 1, "K": 1, "cox": 0, "aspi": 0
+        }
+
+        node_order = list(self.fcm.nodes())
+        initial_vector = np.array([initial_vector_map.get(node, 0) for node in node_order])
+        mask = np.zeros_like(initial_vector)
+
+        # Evolve with a subset size of 1
+        result_vector = self.fcm.evolve_asynchronous(initial_vector, mask, subset_size=1)
+
+        # Check that the output has the correct shape
+        self.assertEqual(result_vector.shape, (12,))
+
+        # Check that the number of changed nodes is at most the subset size
+        self.assertTrue(np.sum(result_vector != initial_vector) <= 1)
+
+    def test_knowledge_fusion(self):
+        """
+        Test the knowledge fusion static methods.
+        """
+        fcm1 = FCM()
+        fcm1.add_weighted_edges_from([('A', 'B', 0.5), ('B', 'C', 0.8)])
+
+        fcm2 = FCM()
+        fcm2.add_weighted_edges_from([('A', 'B', 0.7), ('C', 'A', -0.4)])
+
+        # Test simple join
+        joined_fcm = FCM.join([fcm1, fcm2])
+        self.assertAlmostEqual(joined_fcm.get_edge_data('A', 'B')[0]['weight'], 0.6)
+        self.assertAlmostEqual(joined_fcm.get_edge_data('B', 'C')[0]['weight'], 0.4)
+        self.assertAlmostEqual(joined_fcm.get_edge_data('C', 'A')[0]['weight'], -0.2)
+
+        # Test join by vote
+        fcm3 = FCM()
+        fcm3.add_weighted_edges_from([('A', 'B', 0.9)])
+        voted_fcm = FCM.join_by_vote([fcm1, fcm2, fcm3])
+        # Edge (A, B) should exist because it's in all 3 FCMs
+        self.assertTrue(voted_fcm.has_edge('A', 'B'))
+        # Edge (B, C) should be vetoed because it's only in 1 of 3 FCMs
+        self.assertFalse(voted_fcm.has_edge('B', 'C'))
+
+    def test_hebbian_learning(self):
+        """
+        Test the Hebbian learning method.
+        """
+        fcm = FCM()
+        fcm.add_weighted_edges_from([('A', 'B', 0.5)])
+
+        # Create a simple time-series where A and B are correlated
+        data = np.array([
+            [0, 1, 0, 1, 0, 1],  # Node A
+            [0, 1, 0, 1, 0, 1]   # Node B
+        ])
+
+        # Learn with the 'hebbian' rule
+        fcm.learn(data, rule='hebbian', learning_rate=0.1)
+
+        # The weight should increase because of the correlation
+        self.assertTrue(fcm.get_edge_data('A', 'B')[0]['weight'] > 0.5)
+
 
 if __name__ == '__main__':
     unittest.main()

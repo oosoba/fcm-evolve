@@ -8,6 +8,8 @@ This code repo provides functions for and examples of fuzzy cognitive map (FCM) 
   - FCM Combination: combining different FCMs into a unified map via averaging or other aggregation methods,
   - Learning/Adaptation: applying Hebbian learning (& variants) to learn FCM structures and parameters.
 
+The initial functions and models were built in `Mathematica`. Later models were built with a `Python` version of the FCM library. So some of the more advanced functionality show up in the Mathematica library first (e.g. asynchronous map evolution, knowledge fusion, & Hebbian learning).
+
 This repository has been refactored to focus on a modernized and robust Python implementation.
 
 ## Features

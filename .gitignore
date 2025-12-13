@@ -1,4 +1,9 @@
 .ipynb_checkpoints
+
+# Python
+__pycache__/
+*.pyc
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
